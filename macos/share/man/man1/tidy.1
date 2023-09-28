@@ -1,0 +1,1081 @@
+.\" tidy man page for the HTML Tidy
+.TH TIDY 1 "5.9.20" "HTML Tidy" "5.9.20"
+
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.SH NAME
+\fBtidy\fR - check, correct, and pretty-print HTML(5) files
+.SH SYNOPSIS
+\fBtidy\fR [\fIoptions\fR] [\fIfile\fR ...] [\fIoptions\fR] [\fIfile\fR ...] ...
+.SH DESCRIPTION
+Tidy reads HTML, XHTML, and XML files and writes cleaned-up markup.  
+For HTML variants, it detects, reports, and corrects many common coding errors
+and strives to produce visually equivalent markup that is both conformant
+to the HTML specifications and that works in most browsers.
+.LP
+A common use of Tidy is to convert plain HTML to XHTML.  
+For generic XML files, Tidy is limited to correcting basic well-formedness
+errors and pretty printing.
+.LP
+If no input file is specified, Tidy reads the standard input.  
+If no output file is specified, Tidy writes the tidied markup to the
+standard output.  If no error file is specified, Tidy writes messages
+to the standard error.
+.SH OPTIONS
+Tidy supports two different kinds of options.  
+Purely \fIcommand-line\fR options, starting with a single dash '\fB-\fR',
+can only be used on the command-line, not in configuration files.  
+They are listed in the first part of this section.  
+\fIConfiguration\fR options, on the other hand, can either be passed
+on the command line, starting with two dashes \fB--\fR,
+or specified in a configuration file,
+using the option name, followed by a colon \fB:\fR, plus the value, without 
+the starting dashes. They are listed in the second part of this section,
+with a sample config file.
+.LP
+For \fIcommand-line\fR options that expect a numerical argument,
+a default is assumed if no meaningful value can be found.  
+On the other hand, \fIconfiguration\fR options cannot be used
+without a value; a \fIconfiguration\fR option without a value
+is simply discarded and reported as an error.
+.LP
+Using a \fIcommand-line\fR option is sometimes equivalent to setting
+the value of a \fIconfiguration\fR option.  The equivalent option
+and value are shown in parentheses in the list below, as they would
+appear in a configuration file.  For example,
+\fB-quiet, -q\fR (\fIquiet: yes\fR) means that using the
+\fIcommand-line\fR option \fB-quiet\fR or \fB-q\fR
+is equivalent to setting the \fIconfiguration\fR option
+\fIquiet\fR to \fIyes\fR.
+.LP
+Single-letter \fIcommand-line\fR options without an associated value
+can be combined; for example '\fB-i\fR', '\fB-m\fR' and '\fB-u\fR'
+may be combined as '\fB-imu\fR'.
+.SS File manipulation
+  
+.TP
+\fB-output <Datei>\fR, \fB-o <Datei>\fR (\fIoutput-file: <Datei>\fR)
+Ausgaben in die genannte <Datei> schreiben
+.TP
+\fB-config <Datei>\fR
+setze Konfigurationseinstellungen aus der genannten <Datei>
+.TP
+\fB-file <Datei>\fR, \fB-f <Datei>\fR (\fIerror-file: <Datei>\fR)
+schreibe Fehler und Warnungen in die genannte <Datei>
+.TP
+\fB-modify\fR, \fB-m\fR (\fIwrite-back: yes\fR)
+originale Eingabedateien verändern
+.SS Processing directives
+  
+.TP
+\fB-indent\fR, \fB-i\fR (\fIindent: auto\fR)
+Element Inhalt einrücken
+.TP
+\fB-wrap <Spalte>\fR, \fB-w <Spalte>\fR (\fIwrap: <Spalte>\fR)
+Text an der genannten <Spalte> umbrechen. 0 wird angenommen, wenn <Spalte> fehlt. Wenn diese Option fehlt, gilt der Standard für die Option 'wrap'.
+.TP
+\fB-upper\fR, \fB-u\fR (\fIuppercase-tags: yes\fR)
+erzwinge Großschreibung für Tags
+.TP
+\fB-clean\fR, \fB-c\fR (\fIclean: yes\fR)
+ersetze FONT, NOBR und CENTER Tags durch CSS
+.TP
+\fB-bare\fR, \fB-b\fR (\fIbare: yes\fR)
+entferne typografische Anführungsstriche, Geviertstriche, etc.
+.TP
+\fB-gdoc\fR, \fB-g\fR (\fIgdoc: yes\fR)
+erzeuge saubere Version des aus Google Docs exportierten HTML
+.TP
+\fB-numeric\fR, \fB-n\fR (\fInumeric-entities: yes\fR)
+eher numerische- als benannte Entities ausgeben
+.TP
+\fB-errors\fR, \fB-e\fR (\fImarkup: no\fR)
+nur Fehler und Warnungen anzeigen
+.TP
+\fB-quiet\fR, \fB-q\fR (\fIquiet: yes\fR)
+unwesentliche Ausgaben unterdrücken
+.TP
+\fB-omit\fR (\fIomit-optional-tags: yes\fR)
+optionale Start- und End-Tags weglassen
+.TP
+\fB-xml\fR (\fIinput-xml: yes\fR)
+bestimmen, dass die Eingabe wohlgeformtes XML ist
+.TP
+\fB-asxml\fR, \fB-asxhtml\fR (\fIoutput-xhtml: yes\fR)
+konvertiere HTML zu wohlgeformtem XHTML
+.TP
+\fB-ashtml\fR (\fIoutput-html: yes\fR)
+erzwinge Umwandlung von XHTML in wohlgeformtes HTML
+.TP
+\fB-access <Niveau>\fR (\fIaccessibility-check: <Niveau>\fR)
+Führe zusätzliche Prüfungen der Barrierefreiheit durch (<Niveau> = 0, 1, 2, 3). 0 wird angenommen, wenn <Niveau> fehlt.
+.SS Character encodings
+  
+.TP
+\fB-raw\fR
+Werte über 127 ausgeben, ohne Konvertierung zu Entities
+.TP
+\fB-ascii\fR
+verwende ISO-8859-1 für Eingaben, US-ASCII für Ausgaben
+.TP
+\fB-latin0\fR
+verwende ISO-8859-15 für Eingaben, US-ASCII für Ausgaben
+.TP
+\fB-latin1\fR
+verwende ISO-8859-1 für Ein- und Ausgaben
+.TP
+\fB-iso2022\fR
+Verwende ISO-2022 für Ein- und Ausgaben
+.TP
+\fB-utf8\fR
+verwende UTF-8 für Ein- und Ausgaben
+.TP
+\fB-mac\fR
+verwende MacRoman für Eingaben, US-ASCII für Ausgaben
+.TP
+\fB-win1252\fR
+verwende Windows-1252 für Eingaben, US-ASCII für Ausgaben
+.TP
+\fB-ibm858\fR
+verwende IBM-858 (CP850+Euro) für Eingaben, US-ASCII für Ausgaben
+.TP
+\fB-utf16le\fR
+verwende UTF-16LE für Ein- und Ausgaben
+.TP
+\fB-utf16be\fR
+verwende UTF-16BE für Ein- und Ausgaben
+.TP
+\fB-utf16\fR
+verwende UTF-16 für Ein- und Ausgaben
+.TP
+\fB-big5\fR
+verwende Big5 für Ein- und Ausgaben
+.TP
+\fB-shiftjis\fR
+verwende Shift_JIS für Ein- und Ausgaben
+.SS Miscellaneous
+  
+.TP
+\fB-version\fR, \fB-v\fR
+Tidy-Version anzeigen
+.TP
+\fB-help\fR, \fB-h\fR, \fB-?\fR
+liste Kommandozeilenoptionen
+.TP
+\fB-help-config\fR
+alle Konfigurationseinstellungen auflisten
+.TP
+\fB-help-env\fR
+Informationen zu Umgebung und Laufzeiteinstellungen anzeigen
+.TP
+\fB-show-config\fR
+Aktuelle Konfigurationseinstellungen auflisten
+.TP
+\fB-export-config\fR
+Aktuelle Konfigurationseinstellungen so auflisten, wie sie für eine Konfigurationsdatei geeignet sind
+.TP
+\fB-export-default-config\fR
+Standard Konfigurationseinstellungen so auflisten, wie sie für eine Konfigurationsdatei geeignet sind
+.TP
+\fB-help-option <Option>\fR
+zeige eine Beschreibung der <Option>
+.TP
+\fB-language <Sprache>\fR (\fIlanguage: <Sprache>\fR)
+Sprache für Ausgaben von Tidy auf <Sprache> einstellen. Für weitere Hinweise geben Sie '-language help' ein. Verwendung vor Argumenten, die Ausgaben erzeugen, damit die Spracheinstellung beachtet wird, z.B.,`tidy -lang es -lang help`.
+.SS XML
+  
+.TP
+\fB-xml-help\fR
+Kommandozeilenparameter im XML Format auflisten
+.TP
+\fB-xml-config\fR
+alle Konfigurationsoptionen im XML Format auflisten
+.TP
+\fB-xml-strings\fR
+Alle Zeichenketten als XML ausgeben
+.TP
+\fB-xml-error-strings\fR
+Fehlerkonstanten und Zeichenketten im XML-Format ausgeben
+.TP
+\fB-xml-options-strings\fR
+Optionsbeschreibungen in XML ausgeben
+.SS Configuration Options General
+.rs
+.LP
+\fIConfiguration\fR options can be specified
+by preceding each option with \fB--\fR at the command line,
+followed by its desired value,
+OR by placing the options and values in a configuration file,
+and telling tidy to read that file with the \fB-config\fR option:
+.LP
+.in 1i
+\fBtidy --\fR\fIoption1 \fRvalue1 \fB--\fIoption2 \fRvalue2 ...
+.br
+\fBtidy -config \fIconfig-file \fR ...
+.LP
+\fIConfiguration\fR options can be conveniently grouped
+in a single config file.  
+A Tidy configuration file is simply a text file, where each option
+is listed on a separate line in the form
+.LP
+.in 1i
+\fIoption1\fR: \fIvalue1\fR
+.br
+\fIoption2\fR: \fIvalue2\fR
+.br
+etc.
+.LP
+The permissible values for a given option depend on the option's Type.  
+There are five Types: \fIBoolean\fR, \fIAutoBool\fR, \fIDocType\fR,
+\fIEnum\fR, and \fIString\fR.  
+\fIBoolean\fR Types allow any of \fByes/no, y/n, true/false, t/f, 1/0\fR.  
+\fIAutoBool\fRs allow \fBauto\fR in addition to the values allowed
+by \fIBooleans\fR.  
+\fIInteger\fR Types take non-negative integers.  
+\fIString\fR Types generally have no defaults, and you should provide them in
+non-quoted form (unless you wish the output to contain the literal quotes).
+.LP
+\fIEnum\fR, \fIEncoding\fR, and \fIDocType\fR Types have a fixed repertoire
+of items, which are listed in the \fISupported values\fR sections below.
+.LP
+You only need to provide options and values for those whose defaults you wish
+to override, although you may wish to include some already-defaulted options
+and values for the sake of documentation and explicitness.
+.LP
+Here is a sample config file, with at least one example of each of
+the five Types:
+.LP
+    \fI// sample Tidy configuration options
+    output-xhtml: yes
+    add-xml-decl: no
+    doctype: strict
+    char-encoding: ascii
+    indent: auto
+    wrap: 76
+    repeated-attributes: keep-last
+    error-file: errs.txt
+\fR
+.LP
+Below is a summary and brief description of each of the options.  
+They are listed alphabetically within each category.
+.SS Document Display options
+.rs
+.TP
+\fB--gnu-emacs\fR \fIBoolean\fR (\fBno\fR if unset)
+.br
+Mit dieser Option ändert Tidy das Format von Fehler- und Warnmeldungen so, dass sie leichter von GNU Emacs und einigen anderen Programmen geparst werden. Aus dem standardmäßigen 
+.sp 1
+ Zeile <Zeilennummer> Spalte <Spaltennummer> - (Fehler|Warnung): <Meldung> 
+.sp 1
+wird eine Ausgabe, die den Dateinamen der Eingabe enthält: 
+.sp 1
+ <Dateiname>:<Zeilennummer>:<Spaltennummer>: (Fehler|Warnung): <Meldung>
+
+See also: \fB--show-filename\fR
+.TP
+\fB--markup\fR \fIBoolean\fR (\fByes\fR if unset)
+.br
+This option specifies if Tidy should generate a pretty printed version of the markup. Note that Tidy won't generate a pretty printed version if it finds significant errors (see \fIforce-output\fR).
+.TP
+\fB--mute\fR \fIString\fR
+.br
+Use this option to prevent Tidy from displaying certain types of report output, for example, for conditions that you wish to ignore. 
+.sp 1
+This option takes a list of one or more keys indicating the message type to mute. You can discover these message keys by using the \fImute-id\fR configuration option and examining Tidy's output.
+
+See also: \fB--mute-id\fR
+.TP
+\fB--mute-id\fR \fIBoolean\fR (\fBno\fR if unset)
+.br
+This option indicates whether or not Tidy should display message ID's with each of its error reports. This could be useful if you wanted to use the \fImute\fR configuration option in order to filter out certain report messages.
+
+See also: \fB--mute\fR
+.TP
+\fB--quiet\fR \fIBoolean\fR (\fBno\fR if unset)
+.br
+Wenn diese Option aktiv is, beschränkt Tidy andere Ausgaben als die des bereinigten Dokuments auf Fehler- und Warnmeldungen.
+.TP
+\fB--show-body-only\fR \fIEnum\fR (\fBno\fR if unset)
+.br
+Supported values: \fBno, yes, auto\fR
+
+Die Option legt fest, ob Tidy nur den Inhalt des \fIbody\fR Elements als HTML-Fragment ausgeben soll. 
+.sp 1
+Hier \fBauto\fR einzustellen hat zur Folge, dass die Wirkung nur eintritt, wenn das \fIbody\fR Element hergeleitet wurde.
+.sp 1
+Die Methode ist nützlich, um ganze Seiten als Teil einer anderen Seite auszugeben. 
+.sp 1
+Die Option ist wirkungslos, wenn XML Ausgabe gefordert ist.
+.TP
+\fB--show-errors\fR \fIInteger\fR (\fB6\fR if unset)
+.br
+Mit dem Wert dieser Option wird gesteuert, ob Tidy weitere Fehler meldet. Wenn der Wert \fB0\fR ist, werden gar keine Fehler gemeldet.
+.TP
+\fB--show-filename\fR \fIBoolean\fR (\fBno\fR if unset)
+.br
+Diese Option legt fest, ob Tidy den Dateinamen in Meldungen anzeigt. z.B.: 
+.sp 1
+ tidy -q -e --show-filename yes index.html
+.sp 1
+ index.html: line 43 column 3 - Warning: replacing invalid UTF-8 bytes (char. code U+00A9)
+
+See also: \fB--gnu-emacs\fR
+.TP
+\fB--show-info\fR \fIBoolean\fR (\fByes\fR if unset)
+.br
+Mit dieser Option wird festgelegt, ob Tidy Protokollmeldungen auf dem Niveau INFO anzeigen soll.
+.TP
+\fB--show-warnings\fR \fIBoolean\fR (\fByes\fR if unset)
+.br
+Diese Option legt fest, ob Tidy Warnungen ausgeben soll oder nicht. Es kann nützlich sein, Warnungen zu deaktivieren, wenn wenige Fehler in einer Masse von Warnmeldungen untergehen.
+.SS Document In and Out options
+  
+.rs
+.TP
+\fB--add-meta-charset\fR \fIBoolean\fR (\fBno\fR if unset)
+.br
+This option, when enabled, adds a \fI<meta>\fR element and sets the \fIcharset\fR attribute to the encoding of the document. Set this option to \fByes\fR to enable it.
+.TP
+\fB--add-xml-decl\fR \fIBoolean\fR (\fBno\fR if unset)
+.br
+This option specifies if Tidy should add the XML declaration when outputting XML or XHTML. 
+.sp 1
+Note that if the input already includes an \fI<?xml ... ?>\fR declaration then this option will be ignored. 
+.sp 1
+If the encoding for the output is different from \fBascii\fR, one of the \fButf*\fR encodings, or \fBraw\fR, then the declaration is always added as required by the XML standard.
+
+See also: \fB--char-encoding\fR, \fB--output-encoding\fR
+.TP
+\fB--add-xml-space\fR \fIBoolean\fR (\fBno\fR if unset)
+.br
+This option specifies if Tidy should add \fIxml:space="preserve"\fR to elements such as \fI<pre>\fR, \fI<style>\fR and \fI<script>\fR when generating XML. 
+.sp 1
+This is needed if the whitespace in such elements is to be parsed appropriately without having access to the DTD.
+.TP
+\fB--doctype\fR \fIString\fR (\fBauto\fR if unset)
+.br
+Diese Option setzt die DOCTYPE Deklaration, die von Tidy generiert wird. 
+.sp 1
+Wenn hier \fBomit\fR eingestellt ist, enthält die Ausgabe keine DOCTYPE Deklaration. Beachten Sie, dass damit auch \fInumeric-entities\fR auf \fByes\fR eingestellt wird. 
+.sp 1
+Mit dem Wert \fBhtml5\fR wird der DOCTYPE auf \fI<!DOCTYPE html>\fR festgelegt.
+.sp 1
+Wird statt dessen \fBauto\fR (der Standard) verwendet, wird Tidy versuchen, einen aufgrund des Dokumentinhalts vermuteten DOCTYPE zu verwenden. Beachten Sie, dass auf diese Weise der DOCTYPE des aktuellen Dokuments \fInicht\fR geändert wird. 
+.sp 1
+Der Wert \fBstrict\fR veranlasst Tidy, den DOCTYPE auf HTML4 oder XHTML1 strict DTD einzustellen. 
+.sp 1
+Mit dem Wert \fBloose\fR wird der DOCTYPE HTML4 oder XHTML1 loose (transitional) DTD eingestellt. 
+.sp 1
+Alternatif können Sie eine Zeichenkette für den Formal Public Identifier (FPI) angeben.
+.sp 1
+Zum Beispiel: 
+.sp 1
+\fIdoctype: "-//ACME//DTD HTML 3.14159//EN"\fR
+.sp 1
+Wenn Sie den FPI für ein XHTML Dokument angeben, erzeugt Tidy eine leere Zeichenkette für den System Identifyer. In HTML-Dokumenten fügt Tidy einen System Identifier nur dann ein, wenn er schon vorher vorhanden war, im Hinblick auf die Verarbeitungsmodi einiger Browser. Tidy lässt den DOCTYPE generischer XML-Dokumente unangetastet.
+.sp 1
+Die Option bedingt keinerlei Überprüfung der Dokumentkonformität.
+.TP
+\fB--input-xml\fR \fIBoolean\fR (\fBno\fR if unset)
+.br
+This option specifies if Tidy should use the XML parser rather than the error correcting HTML parser.
+.TP
+\fB--output-html\fR \fIBoolean\fR (\fBno\fR if unset)
+.br
+Diese Option bestimmt, ob Tidy eine formatierte Ausgabe als HTML schreiben soll.
+.TP
+\fB--output-xhtml\fR \fIBoolean\fR (\fBno\fR if unset)
+.br
+This option specifies if Tidy should generate pretty printed output, writing it as extensible HTML. 
+.sp 1
+This option causes Tidy to set the DOCTYPE and default namespace as appropriate to XHTML, and will use the corrected value in output regardless of other sources. 
+.sp 1
+For XHTML, entities can be written as named or numeric entities according to the setting of \fInumeric-entities\fR. 
+.sp 1
+The original case of tags and attributes will be preserved, regardless of other options.
+.TP
+\fB--output-xml\fR \fIBoolean\fR (\fBno\fR if unset)
+.br
+This option specifies if Tidy should pretty print output, writing it as well-formed XML. 
+.sp 1
+Any entities not defined in XML 1.0 will be written as numeric entities to allow them to be parsed by an XML parser. 
+.sp 1
+The original case of tags and attributes will be preserved, regardless of other options.
+.SS File Input-Output options
+  
+.rs
+.TP
+\fB--error-file\fR \fIString\fR
+.br
+Diese Option nennt die Fehlerdatei, in der Tidy Fehler und Warnungen vermerkt. Normalerweise werden Fehler und Warnungen auf \fIstderr\fR ausgegeben.
+
+See also: \fB--output-file\fR
+.TP
+\fB--keep-time\fR \fIBoolean\fR (\fBno\fR if unset)
+.br
+This option specifies if Tidy should keep the original modification time of files that Tidy modifies in place. 
+.sp 1
+Setting the option to \fByes\fR allows you to tidy files without changing the file modification date, which may be useful with certain tools that use the modification date for things such as automatic server deployment.
+.sp 1
+Note this feature is not supported on some platforms.
+.TP
+\fB--output-file\fR \fIString\fR
+.br
+This option specifies the output file Tidy uses for markup. Normally markup is written to \fIstdout\fR.
+
+See also: \fB--error-file\fR
+.TP
+\fB--write-back\fR \fIBoolean\fR (\fBno\fR if unset)
+.br
+Mit dieser Option wird bestimmt, ob Tidy den bereinigten Auszeichnungscode in die selbe Datei schreiben soll, aus der er gelesen worden ist. 
+.sp 1
+Sie sollten Kopien wichtiger Dateien anlegen, bevor Sie sie bereinigen, da, in Ausnahmefällen, das Ergebnis nicht Ihren Erwartungen entsprechen kann.
+.SS Diagnostics options
+  
+.rs
+.TP
+\fB--accessibility-check\fR \fIEnum\fR (\fB0 (Tidy Classic)\fR if unset)
+.br
+Supported values: \fB0 (Tidy Classic), 1 (Priority 1 Checks), 2 (Priority 2 Checks), 3 (Priority 3 Checks)\fR
+
+Diese Option bestimmt, wenn nötig, das Niveau der Überprüfungen der Barrierefreiheit, die Tidy durchführen soll. 
+.sp 1
+Niveau \fB0 (Tiidy Classic)\fR entsprichte dem Niveau der Prüfugen von Tidy Classic.
+.sp 1
+Auf dieser Seite finden Sie weitere Informationen zur Prüfung der Barrierefreiheit mit Tidy: Barrierefreiheit mit Tidy at \fIhttps://www.html-tidy.org/accessibility/\fR.
+.TP
+\fB--force-output\fR \fIBoolean\fR (\fBno\fR if unset)
+.br
+Diese Option legt fest, ob Tidy auch dann eine Ausgabe erzeugt, wenn Fehler auftreten. 
+.sp 1
+Verwenden Sie diese Einstellung mit Vorsicht; wenn Tidy einen Fehler meldet, heißt das, dass Tidy nicht (oder nicht sicher) in der Lage ist, den Fehler zu beheben. Die erzeugte Ausgabe kann darum Ihren Erwartungen widersprechen.
+.TP
+\fB--show-meta-change\fR \fIBoolean\fR (\fBno\fR if unset)
+.br
+This option enables a message whenever Tidy changes the \fIcontent\fR attribute of a meta charset declaration to match the encoding of the document. Set this option to \fByes\fR to enable it.
+.TP
+\fB--warn-proprietary-attributes\fR \fIBoolean\fR (\fByes\fR if unset)
+.br
+This option specifies if Tidy should warn on proprietary attributes.
+.SS Encoding options
+  
+.rs
+.TP
+\fB--char-encoding\fR \fIEncoding\fR (\fButf8\fR if unset)
+.br
+Supported values: \fBraw, ascii, latin0, latin1, utf8, iso2022, mac, win1252, ibm858, utf16le, utf16be, utf16, big5, shiftjis\fR
+
+Diese Option bestimmt, welche Zeichenkodierung Tidy für Eingaben annehmen soll und, falls zutreffend, dass Tidy für Ausgaben automatisch eine geeignete Zeichenkodierung wählt. Die Kodierungen für Ein- und Ausgaben können sich unterscheiden. 
+.sp 1
+Wird für die Eingabe eine der Kodierungen \fBascii\fR, \fBlatin0\fR, \fBibm858\fR, \fBmac\fR oder \fBwin1252\fR gefordert, wird die Option \fIoutput-encoding\fR automatisch auf \fBascii\fR eingestellt. Sie können dies verhindern, indem Sie den Wert für \fIoutput-encoding\fR selbst bestimmen. 
+.sp 1
+Bei anders kodierten Eingaben wird die Option \fIoutput-encoding\fR automatisch auf den identischen Wert eingestellt. 
+.sp 1
+Sie können den voreingestellten Wert für \fIoutput-encoding\fR überschreiben, indem Sie die Option selbst setzen. 
+.sp 1
+Tidy ist kein Konverter für Zeichenkodierungen. Auch, wenn Latin- und UTF-Kodierungen frei vermischt sein können, ist es mit Tidy nicht möglich, asiatische Kodierungen nach Latin zu konvertieren.
+
+See also: \fB--input-encoding\fR, \fB--output-encoding\fR
+.TP
+\fB--input-encoding\fR \fIEncoding\fR (\fButf8\fR if unset)
+.br
+Supported values: \fBraw, ascii, latin0, latin1, utf8, iso2022, mac, win1252, ibm858, utf16le, utf16be, utf16, big5, shiftjis\fR
+
+Diese Option legt die Zeichenkodierung fest, die Tidy für die Eingabe verwendet. Tidy geht bei manchen Eingabekodierungen von ein paar Annahmen aus. 
+.sp 1
+Für \fBascii\fR akzeptiert Tidy Latin-1 (ISO-8859-1) Zeichenwerte und konvertiert sie nötigenfalls in Entities. 
+.sp 1
+Für \fBraw\fR stellt Tidy keinerlei Vermutungen über die Zeichenwerte an und reicht sie unverändert an die Ausgabe weiter. 
+.sp 1
+Für \fBmac\fR und \fBwin1252\fR werden händlerspezifische Zeichenwerte akzeptiert und nötigenfalls in Entities umgewandelt. 
+.sp 1
+Asiatische Zeichenkodierungen, wie \fBiso2022\fR, werden in geeigneter Weise behandelt, unter der Annahme, dass auch \fIoutput-encoding\fR entsprechend angegeben ist. 
+.sp 1
+Tidy ist kein Konverter für Zeichenkodierungen. Auch, wenn Latin- und UTF-Kodierungen frei gemischt werden können, ist es nicht möglich, asiatische Kodierungen mit Tidy in Latin umzuwandeln.
+
+See also: \fB--char-encoding\fR
+.TP
+\fB--newline\fR \fIEnum\fR (\fBLF\fR if unset)
+.br
+Supported values: \fBLF, CRLF, CR\fR
+
+The default is appropriate to the current platform. 
+.sp 1
+Generally \fBCRLF\fR on PC-DOS, Windows and OS/2; \fBCR\fR on Classic Mac OS; and \fBLF\fR everywhere else (Linux, macOS, and Unix).
+.TP
+\fB--output-bom\fR \fIEnum\fR (\fBauto\fR if unset)
+.br
+Supported values: \fBno, yes, auto\fR
+
+Diese Option bestimmt, ob Tidy eine Byte-Reihenfolge-Markierung (BOM) an den Anfang der Ausgabe schreiben soll. Dies betrifft nur UTF-8 und UTF-16 Ausgabekodierungen, wo das BOM-Zeichen entweder den Wert U+EFBBBF (UTF-8) oder U+FEFF (UTF-16) hat. 
+.sp 1
+Wenn die Option den Wert \fBauto\fR hat, wird Tidy die BOM nur dann in die Ausgabe schreiben, wenn sie bereits zu Beginn der Eingabedaten vorhanden war. 
+.sp 1
+XML/XMLHTML-Ausgaben in UTF-16 Kodierung erhalten immer eine BOM.
+.TP
+\fB--output-encoding\fR \fIEncoding\fR (\fButf8\fR if unset)
+.br
+Supported values: \fBraw, ascii, latin0, latin1, utf8, iso2022, mac, win1252, ibm858, utf16le, utf16be, utf16, big5, shiftjis\fR
+
+This option specifies the character encoding Tidy uses for output. Some of the output encodings affect whether or not some characters are translated to entities, although in all cases, some entities will be written according to other Tidy configuration options. 
+.sp 1
+For \fBascii\fR, \fBmac\fR, and \fBwin1252\fR output encodings, entities will be used for all characters with values over 127. 
+.sp 1
+For \fBraw\fR output, Tidy will write values above 127 without translating them to entities. 
+.sp 1
+Output using \fBlatin1\fR will cause Tidy to write character values higher than 255 as entities. 
+.sp 1
+The UTF family such as \fButf8\fR will write output in the respective UTF encoding. 
+.sp 1
+Asian output encodings such as \fBiso2022\fR will write output in the specified encoding, assuming a corresponding \fIinput-encoding\fR was specified. 
+.sp 1
+Tidy is not an encoding converter. Although the Latin and UTF encodings can be mixed freely, it is not possible to convert Asian encodings to Latin encodings with Tidy.
+
+See also: \fB--char-encoding\fR
+.SS Cleanup options
+  
+.rs
+.TP
+\fB--bare\fR \fIBoolean\fR (\fBno\fR if unset)
+.br
+This option specifies if Tidy should replace smart quotes and em dashes with ASCII, and output spaces rather than non-breaking spaces, where they exist in the input.
+.TP
+\fB--clean\fR \fIBoolean\fR (\fBno\fR if unset)
+.br
+This option specifies if Tidy should perform cleaning of some legacy presentational tags (currently \fI<i>\fR, \fI<b>\fR, \fI<center>\fR when enclosed within appropriate inline tags, and \fI<font>\fR). If set to \fByes\fR, then the legacy tags will be replaced with CSS \fI<style>\fR tags and structural markup as appropriate.
+.TP
+\fB--drop-empty-elements\fR \fIBoolean\fR (\fByes\fR if unset)
+.br
+Diese Option legt fest, ob Tidy leere Elemente verwerfen soll.
+.TP
+\fB--drop-empty-paras\fR \fIBoolean\fR (\fByes\fR if unset)
+.br
+Diese Option legt fest, ob Tidy leere Absätze verwerfen soll.
+.TP
+\fB--drop-proprietary-attributes\fR \fIBoolean\fR (\fBno\fR if unset)
+.br
+Mit dieser Option wird bestimmt, ob Tidy proprietäre Attribute entfernen soll, wie Microsoft data binding Attribute. Außerdem werden solche Attribute, die in der ausgegebenen Version des HTML-Codes nicht erlaubt sind, verworfen, wenn gleichzeitig \fIstrict-tags-attributes\fR gesetzt wurde.
+.TP
+\fB--gdoc\fR \fIBoolean\fR (\fBno\fR if unset)
+.br
+Diese Option bestimmt, ob sich Tidy beim Bereinigen von HTML-Code, der aus Google Docs exportiert wurde, speziell verhalten soll.
+.TP
+\fB--logical-emphasis\fR \fIBoolean\fR (\fBno\fR if unset)
+.br
+Diese Option bestimmt, ob Tidy jedes \fI<i>\fR durch \fI<em>\fR und jedes \fI<b>\fR durch \fI<strong>\fR ersetzen soll. Attribute dieser Tags bleiben unverändert erhalten. 
+.sp 1
+Diese Option kann unabhängig von \fIclean\fR aktiviert werden.
+.TP
+\fB--merge-divs\fR \fIEnum\fR (\fBauto\fR if unset)
+.br
+Supported values: \fBno, yes, auto\fR
+
+Diese Option kann das Verhalten von \fIclean\fR beeinflussen, wenn ihr Wert auf \fByes\fR gesetzt ist. 
+.sp 1
+Tidy wird dann verschachtelte \fI<div>\fR zu einem einzigen verschmelzen, wie \fI<div><div>...</div></div>\fR. 
+.sp 1
+Wenn der Wert statt dessen \fBauto\fR ist, werden die Attribute des innersten \fI<div>\fR ins äußerste verschoben. Verschachtelte \fI<div>\fR mit \fIid\fR-Attributen werden \fInicht\fR verschmolzen. 
+.sp 1
+Mit \fByes\fR werden die Attribute des innersten \fI<div>\fR verworfen, mit Ausnahme von \fIclass\fR und \fIstyle\fR.
+
+See also: \fB--clean\fR, \fB--merge-spans\fR
+.TP
+\fB--merge-spans\fR \fIEnum\fR (\fBauto\fR if unset)
+.br
+Supported values: \fBno, yes, auto\fR
+
+Diese Option kann das Verhalten von \fIclean\fR beeinflussen, wenn ihr Wert \fByes\fR ist.
+.sp 1
+Dann wird Tidy verschachtelte \fI<span>\fR, wie in \fI<span><span>...</span></span>\fR zu einem einzigen verschmelzen.
+.sp 1
+Der Algorithmus ist identisch mit dem der Option \fImerge-divs\fR (siehe dort).
+
+See also: \fB--clean\fR, \fB--merge-divs\fR
+.TP
+\fB--word-2000\fR \fIBoolean\fR (\fBno\fR if unset)
+.br
+Diese Option bestimmt, ob Tidy große Anstrengungen unternehmen soll, um all den zusätzlichen Code, den Microsoft Word 2000 beim Speichern als "Web-Seite" einfügt, wieder zu entfernen. Eingebettete Bilder oder VML werden nicht behandelt. 
+.sp 1
+Sie sollten in Betracht ziehen, beim Auslösen der Funktion \fBSpeichern als...\fR, dem Dateityp \fBWeb-Seite, gefiltert\fR Vorrang zu geben.
+.SS Entities options
+  
+.rs
+.TP
+\fB--ascii-chars\fR \fIBoolean\fR (\fBno\fR if unset)
+.br
+Kann verwendet werden, um die Wirkung der Option \fIclean\fR zu modifizieren, wenn der den Wert \fByes\fR hat.
+.sp 1
+Hier \fByes\fR zusammen mit \fIclean\fR zu verwenden, hat zur Folge, dass \fI&emdash;\fR, \fI&rdquo;\fR und andere typografische Zeichen in ihre nächstliegenden ASCII-Äquivalente umgewandelt werden.
+
+See also: \fB--clean\fR
+.TP
+\fB--ncr\fR \fIBoolean\fR (\fByes\fR if unset)
+.br
+Diese Option bestimmt, ob Tidy numerische Zeichenreferenzen akzeptieren soll.
+.TP
+\fB--numeric-entities\fR \fIBoolean\fR (\fBno\fR if unset)
+.br
+This option specifies if Tidy should output entities other than the built-in HTML entities (\fI&amp;\fR, \fI&lt;\fR, \fI&gt;\fR, and \fI&quot;\fR) in the numeric rather than the named entity form. 
+.sp 1
+Only entities compatible with the DOCTYPE declaration generated are used. 
+.sp 1
+Entities that can be represented in the output encoding are translated correspondingly.
+
+See also: \fB--doctype\fR, \fB--preserve-entities\fR
+.TP
+\fB--preserve-entities\fR \fIBoolean\fR (\fBno\fR if unset)
+.br
+Diese Option bestimmt, ob Tidy wohlgeformte Entities, wie in der Eingabe vorgefunden, beibehält.
+.TP
+\fB--quote-ampersand\fR \fIBoolean\fR (\fByes\fR if unset)
+.br
+Diese Option bestimmt, ob Tidy alleinstehende \fI&\fR als \fI&amp;\fR ausgeben soll.
+.TP
+\fB--quote-marks\fR \fIBoolean\fR (\fBno\fR if unset)
+.br
+Diese Option bestimmt, ob Tidy \fI"\fR Zeichen als \fI&quot;\fR ausgeben soll, wie es manche Redaktionssysteme bevorzugen. 
+.sp 1
+Das Auslassungszeichen \fI'\fR wird als \fI&#39;\fR ausgegeben, weil viele Web-Browser \fI&apo;\fR noch nicht unterstützen.
+.TP
+\fB--quote-nbsp\fR \fIBoolean\fR (\fByes\fR if unset)
+.br
+Diese Option bestimmt, ob Tidy geschützte Leerzeichen als Entities und nicht als Unicode-Zeichen 160 (dezimal) ausgeben soll.
+.SS Repair options
+  
+.rs
+.TP
+\fB--alt-text\fR \fIString\fR
+.br
+Diese Option bestimmt den Standardwert für das \fIalt=\fR Attribut, das von Tidy eingesetzt wird, wo es in \fI<img>\fR Tags fehlt. 
+.sp 1
+Gehen Sie behutsam damit um; es liegt in Ihrer Verantwortung, Dokumente barrierefrei zu gestalten, für Leute die die Bilder nicht sehen können.
+.TP
+\fB--anchor-as-name\fR \fIBoolean\fR (\fByes\fR if unset)
+.br
+Diese Option steuert das Entfernen oder Hinzufügen des \fIname\fR Attributs in solchen Elementen, die als Verweisanker dienen können. 
+.sp 1
+Wenn hier \fByes\fR gewählt wird und ein \fIname\fR Attribut bisher nicht vorhanden ist, wird es zusammen mit einem \fIid\fR Attribut ergänzt, soweit die DTD dies erlaubt. 
+.sp 1
+Mit dem Wert \fBno\fR, wird ein vorhandenes \fIname\fR Attribut entfernt, sofern en \fIid\fR existiert oder hinzugefügt wurde.
+.TP
+\fB--assume-xml-procins\fR \fIBoolean\fR (\fBno\fR if unset)
+.br
+This option specifies if Tidy should change the parsing of processing instructions to require \fI?>\fR as the terminator rather than \fI>\fR. 
+.sp 1
+This option is automatically set if the input is in XML.
+.TP
+\fB--coerce-endtags\fR \fIBoolean\fR (\fByes\fR if unset)
+.br
+Diese Option bestimmt, ob Tidy ein Start-Tag in ein End-Tag umwandelt, wo es wahrscheinlich erscheint, dass ein solches End-Tag eigentlich gewünscht war; zum Beispiel kann die Eingabe 
+.sp 1
+\fI<span>ein <b>wichtiges<b> Wort</span>\fR
+.sp 1
+von Tidy umgewandelt werden in 
+.sp 1
+\fI<span>ein <b>wichtiges</b> Wort</span>\fR
+.TP
+\fB--css-prefix\fR \fIString\fR (\fBc\fR if unset)
+.br
+Diese Option setzt den Präfix, den Tidy für Style-Regeln verwendet. 
+.sp 1
+Standardmäßig wird \fBc\fR verwendet.
+.TP
+\fB--custom-tags\fR \fIEnum\fR (\fBno\fR if unset)
+.br
+Supported values: \fBno, blocklevel, empty, inline, pre\fR
+
+This option enables the use of tags for autonomous custom elements, e.g. \fI<flag-icon>\fR with Tidy. Custom tags are disabled if this value is \fBno\fR. Other settings - \fBblocklevel\fR, \fBempty\fR, \fBinline\fR, and \fBpre\fR will treat \fIall\fR detected custom tags accordingly. 
+.sp 1
+The use of \fInew-blocklevel-tags\fR, \fInew-empty-tags\fR, \fInew-inline-tags\fR, or \fInew-pre-tags\fR will override the treatment of custom tags by this configuration option. This may be useful if you have different types of custom tags.
+.sp 1
+When enabled these tags are determined during the processing of your document using opening tags; matching closing tags will be recognized accordingly, and unknown closing tags will be discarded.
+
+See also: \fB--new-blocklevel-tags\fR, \fB--new-empty-tags\fR, \fB--new-inline-tags\fR, \fB--new-pre-tags\fR
+.TP
+\fB--enclose-block-text\fR \fIBoolean\fR (\fBno\fR if unset)
+.br
+Diese Option legt fest, ob Tidy ein \fI<p>\fR Element einfügen soll, um Text zu umschließen, den es in solchen Elementen findet, die gemischten Inhalt für HTML transitional, nicht aber für HTML strict erlauben.
+.TP
+\fB--enclose-text\fR \fIBoolean\fR (\fBno\fR if unset)
+.br
+Diese Option legt fest, ob Text, der im \fIbody\fR Element gefunden wird, von einem \fI<p>\fR Element umschlossen werden soll. 
+.sp 1
+Das ist sinnvoll, wenn Sie bereits vorhandenen HTML-Code mit einem Style-Sheet verwenden wollen.
+.TP
+\fB--escape-scripts\fR \fIBoolean\fR (\fByes\fR if unset)
+.br
+Diese Option bewirkt, dass Zeichen oder Zeichenketten, die wie schließende Tags aussehen, wie \fI</g\fR mit backslashes maskiert werden, wie in \fI<\\/g\fR. Setzen Sie en Wert \fBno\fR, um dies zu verhindern.
+.TP
+\fB--fix-backslash\fR \fIBoolean\fR (\fByes\fR if unset)
+.br
+Diese Option bestimmt, ob Tidy Backslashes \fI\\\fR in URLs durch normale Schrägstriche \fI/\fR ersetzen soll.
+.TP
+\fB--fix-bad-comments\fR \fIEnum\fR (\fBauto\fR if unset)
+.br
+Supported values: \fBno, yes, auto\fR
+
+Diese Option bestimmt, ob Tidy unerwartete Bindestriche durch \fI=\fR Zeichen ersetzen soll, wenn Bindestriche aufeinanderfolgen. 
+.sp 1
+Der Standard ist \fBauto\fR, was für HTML5 Dokumente das gleiche wie \fBno\fR bedeutet, für alle anderen aber \fByes\fR. 
+.sp 1
+Die SGML Kommentarsyntax wurde für HTML aufgegeben, alle Versionen von HTML erlauben aufeinanderfolgende Bindestriche, auch wenn das nicht für XML und XHTML gilt. Wenn Sie ältere Browser unterstützen wollen, die SGML Syntax verlangen, sollten Sie hier den Wert \fByes\fR setzen.
+.TP
+\fB--fix-style-tags\fR \fIBoolean\fR (\fByes\fR if unset)
+.br
+This option specifies if Tidy should move all style tags to the head of the document.
+.TP
+\fB--fix-uri\fR \fIBoolean\fR (\fByes\fR if unset)
+.br
+Diese Option legt fest, ob Tidy Attributwerte mit URIs auf ungültige Zeichen überprüft und sie, wenn solche gefunden werden, maskiert, wie von HTML4 empfohlen.
+.TP
+\fB--literal-attributes\fR \fIBoolean\fR (\fBno\fR if unset)
+.br
+This option specifies how Tidy deals with whitespace characters within attribute values. 
+.sp 1
+If the value is \fBno\fR Tidy normalizes attribute values by replacing any newline or tab with a single space, and further by replacing any contiguous whitespace with a single space. 
+.sp 1
+To force Tidy to preserve the original, literal values of all attributes and ensure that whitespace within attribute values is passed through unchanged, set this option to \fByes\fR.
+.TP
+\fB--lower-literals\fR \fIBoolean\fR (\fByes\fR if unset)
+.br
+Diese Option legt fest, ob Tidy solche Attributwerte, die aus einer Liste vordefinierter Werte bestehen, in Kleinbuchstaben konvertieren soll. 
+.sp 1
+Für XHTML-Dokumente ist das notwendig.
+.TP
+\fB--repeated-attributes\fR \fIEnum\fR (\fBkeep-last\fR if unset)
+.br
+Supported values: \fBkeep-first, keep-last\fR
+
+Mit dieser Option wird festgelegt, ob Tidy das erste oder das letzte Vorkommen eines wiederholten Attributs übernehmen soll, z.B. bei aufeinanderfolgenden \fIalign\fR Attributen im selben Tag.
+
+See also: \fB--join-classes\fR, \fB--join-styles\fR
+.TP
+\fB--skip-nested\fR \fIBoolean\fR (\fByes\fR if unset)
+.br
+Diese Option bestimmt, ob Tidy verschachtelte Elemente ausnehmen soll, wenn Script- und Style-Daten analysiert werden.
+.TP
+\fB--strict-tags-attributes\fR \fIBoolean\fR (\fBno\fR if unset)
+.br
+This options ensures that tags and attributes are applicable for the version of HTML that Tidy outputs. When set to \fByes\fR and the output document type is a strict doctype, then Tidy will report errors. If the output document type is a loose or transitional doctype, then Tidy will report warnings. 
+.sp 1
+Additionally if \fIdrop-proprietary-attributes\fR is enabled, then not applicable attributes will be dropped, too. 
+.sp 1
+When set to \fBno\fR, these checks are not performed.
+.TP
+\fB--uppercase-attributes\fR \fIEnum\fR (\fBno\fR if unset)
+.br
+Supported values: \fBno, yes, preserve\fR
+
+This option specifies if Tidy should output attribute names in upper case. 
+.sp 1
+When set to \fBno\fR, attribute names will be written in lower case. Specifying \fByes\fR will output attribute names in upper case, and \fBpreserve\fR can used to leave attribute names untouched. 
+.sp 1
+When using XML input, the original case is always preserved.
+.TP
+\fB--uppercase-tags\fR \fIBoolean\fR (\fBno\fR if unset)
+.br
+Diese Option legt fest, ob Tidy Tagnamen groß oder klein schreibt. 
+.sp 1
+Der Standardwert ist \fBno\fR und setzt kleingeschriebene Tagnamen durch, außer für die XML-Ausgabe, wo die originale Schreibweise beibehalten wird.
+.SS Transformation options
+  
+.rs
+.TP
+\fB--decorate-inferred-ul\fR \fIBoolean\fR (\fBno\fR if unset)
+.br
+Diese Option legt fest, ob Tidy hergeleitete \fI<ul>\fR Elemente mit CSS-Auszeichnungen ausstatten soll, um Einrückungen nach rechts zu verhindern.
+.TP
+\fB--escape-cdata\fR \fIBoolean\fR (\fBno\fR if unset)
+.br
+Mit dieser Option bestimmen Sie, ob Tidy \fI<![CDATA[]]>\fR Abschnitte in normlen Text umwandeln soll.
+.TP
+\fB--hide-comments\fR \fIBoolean\fR (\fBno\fR if unset)
+.br
+Mit dieser Option bestimmen Sie, ob Tidy Kommentare aus der Ausgabe entfernt.
+.TP
+\fB--join-classes\fR \fIBoolean\fR (\fBno\fR if unset)
+.br
+Diese Option bestimmt, ob Tidy mehrere CSS-Klassen zu einer einzigen neuen Klasse kombiniert, wo ein Element mit mehrere Klassennamen versehen wurde.
+.TP
+\fB--join-styles\fR \fIBoolean\fR (\fByes\fR if unset)
+.br
+Diese Option bestimmt, ob Tidy mehrere style-Attribute zu einem einzigen kombiniert, wo ein Element mit mehreren style-Attributen versehen wurde.
+.TP
+\fB--merge-emphasis\fR \fIBoolean\fR (\fByes\fR if unset)
+.br
+Diese Option legt fest, ob Tidy verschachtelte \fI<b>\fR und \fI<i>\fR-Elemente verschmelzen soll; zum Beispiel würde im Falle von 
+.sp 1
+\fI<b class="rtop-2">foo <b class="r2-2">bar</b> baz</b>\fR, 
+.sp 1
+Tidy diese Ausgabe erzeugen: \fI<b class="rtop-2">foo bar baz</b>\fR.
+.TP
+\fB--replace-color\fR \fIBoolean\fR (\fBno\fR if unset)
+.br
+Mit dieser Option können Sie Tidy auffordern, numerische Werte in Farb-Attributen durch HTML/XHTML Farbnamen zu ersetzen, so weit sie definiert sind. Zum Beispiel würde \fI#ffffff\fR zu \fIwhite\fR.
+.SS Teaching Tidy options
+  
+.rs
+.TP
+\fB--new-blocklevel-tags\fR \fITag Names\fR
+.br
+Supported values: \fBtagX, tagY, ...\fR
+
+Diese Option dient der Einführung neuer Block-Elemente. Der Wert muss eine Liste von leerzeichen- oder komma-separierten Tag-Namen sein.
+.sp 1
+Solange Sie die neuen Tags nicht definieren, wird Tidy keine bereinigte Datei erzeugen, wenn die Eingabe bisher unbekannte Tags enthält. 
+.sp 1
+Beachten Sie, dass Sie das Content Model für Elemente wie \fI<table>\fR, \fI<ul>\fR, \fI<ol>\fR and \fI<dl>\fR nicht ändern können. 
+.sp 1
+Die Option wird im XML Modus ignoriert.
+
+See also: \fB--new-empty-tags\fR, \fB--new-inline-tags\fR, \fB--new-pre-tags\fR, \fB--custom-tags\fR
+.TP
+\fB--new-empty-tags\fR \fITag Names\fR
+.br
+Supported values: \fBtagX, tagY, ...\fR
+
+Diese Option führt neue, leere Inline-Elemente ein. Der Wert muss eine leerzeichen- oder komma-separierte Lste von Tagnamen sein. 
+.sp 1
+Sollten Sie neue Elemente nicht deklarieren, verweigert Tidy das Generieren einer bereinigten Datei, wenn die Eingabe bisher unbekannte Elemente enthält. 
+.sp 1
+Achten Sie darauf, auch leere Elemente als entweder Inline- oder Blockelemente zu deklarieren. 
+.sp 1
+Diese Option wird im XML-Modus ignoriert.
+
+See also: \fB--new-blocklevel-tags\fR, \fB--new-inline-tags\fR, \fB--new-pre-tags\fR, \fB--custom-tags\fR
+.TP
+\fB--new-inline-tags\fR \fITag Names\fR
+.br
+Supported values: \fBtagX, tagY, ...\fR
+
+This option specifies new non-empty inline tags. This option takes a space or comma separated list of tag names. 
+.sp 1
+Unless you declare new tags, Tidy will refuse to generate a tidied file if the input includes previously unknown tags. 
+.sp 1
+This option is ignored in XML mode.
+
+See also: \fB--new-blocklevel-tags\fR, \fB--new-empty-tags\fR, \fB--new-pre-tags\fR, \fB--custom-tags\fR
+.TP
+\fB--new-pre-tags\fR \fITag Names\fR
+.br
+Supported values: \fBtagX, tagY, ...\fR
+
+This option specifies new tags that are to be processed in exactly the same way as HTML's \fI<pre>\fR element. This option takes a space or comma separated list of tag names. 
+.sp 1
+Unless you declare new tags, Tidy will refuse to generate a tidied file if the input includes previously unknown tags. 
+.sp 1
+Note you cannot as yet add new CDATA elements. 
+.sp 1
+This option is ignored in XML mode.
+
+See also: \fB--new-blocklevel-tags\fR, \fB--new-empty-tags\fR, \fB--new-inline-tags\fR, \fB--custom-tags\fR
+.SS Pretty Print options
+  
+.rs
+.TP
+\fB--break-before-br\fR \fIBoolean\fR (\fBno\fR if unset)
+.br
+Diese Option legt fest, ob Tidy einen Zeilenumbruch vor jedem \fI<br>\fR Element einfügen soll.
+.TP
+\fB--indent\fR \fIEnum\fR (\fBno\fR if unset)
+.br
+Supported values: \fBno, yes, auto\fR
+
+This option specifies if Tidy should indent block-level tags. 
+.sp 1
+If set to \fBauto\fR Tidy will decide whether or not to indent the content of tags such as \fI<title>\fR, \fI<h1>\fR-\fI<h6>\fR, \fI<li>\fR, \fI<td>\fR, or \fI<p>\fR based on the content including a block-level element. 
+.sp 1
+Setting \fIindent\fR to \fByes\fR can expose layout bugs in some browsers. 
+.sp 1
+Use the option \fIindent-spaces\fR to control the number of spaces or tabs output per level of indent, and \fIindent-with-tabs\fR to specify whether spaces or tabs are used.
+
+See also: \fB--indent-spaces\fR
+.TP
+\fB--indent-attributes\fR \fIBoolean\fR (\fBno\fR if unset)
+.br
+Mit dieser Option wird festgelegt, ob Tidy jedes Attribut auf einer neuen Zeile beginnen soll.
+.TP
+\fB--indent-cdata\fR \fIBoolean\fR (\fBno\fR if unset)
+.br
+Diese Option bestimmt, ob Tidy \fI<![CDATA[]]>\fR Abschnitte einrücken soll.
+.TP
+\fB--indent-spaces\fR \fIInteger\fR (\fB2\fR if unset)
+.br
+Diese Option bestimmt die Anzahl von Leerzeichen oder Tabulatoren, mit denen Tidy Einrückungen vornimmt, wenn \fIindent\fR aktiviert ist. 
+.sp 1
+Beachten Sie, dass der Standardwert für diese Option vom aktuellen Wert der Option \fIindent-with-tabs\fR abhängt (siehe dort).
+
+See also: \fB--indent\fR
+.TP
+\fB--indent-with-tabs\fR \fIBoolean\fR (\fBno\fR if unset)
+.br
+This option specifies if Tidy should indent with tabs instead of spaces, assuming \fIindent\fR is \fByes\fR. 
+.sp 1
+Set it to \fByes\fR to indent using tabs instead of the default spaces. 
+.sp 1
+Use the option \fIindent-spaces\fR to control the number of tabs output per level of indent. Note that when \fIindent-with-tabs\fR is enabled the default value of \fIindent-spaces\fR is reset to \fB1\fR. 
+.sp 1
+Note \fItab-size\fR controls converting input tabs to spaces. Set it to zero to retain input tabs.
+.TP
+\fB--keep-tabs\fR \fIBoolean\fR (\fBno\fR if unset)
+.br
+Der Standardwert dieser Option ist \fBno\fR. Damit ersetzt Tidy alle Tabulatoren durch Leerzeichen, entsprechend der Option \fItab-size\fR und dem aktuellen Zeileneinzug. Dieser Zwischenraum wird später natürlich auf nur ein Leerzeichen reduziert, mit Ausnahme der Abstände, die in den nachfolgend gelisteten Blöcken und Elementen auftreten. 
+.sp 1
+Wenn der Wert auf \fByes\fR eingestellt ist, lässt Tidy einige Tabulatoren unangetastet, aber nur in präformatierten Blöcken, wie \fI<pre>\fR und weiteren CDATA elementen, wie \fI<script>\fR, \fI<style>\fR, sowie Pseudo-Elementen wie \fI<?php ... ?>\fR. Wie immer werden alle anderen Tabulatoren und Tabulatorfolgen im Quelldokument durch Leerzeichen ersetzt.
+.TP
+\fB--omit-optional-tags\fR \fIBoolean\fR (\fBno\fR if unset)
+.br
+Mit dieser Option können optionale Start- und End-Tags von der Ausgabe ausgenommen werden. 
+.sp 1
+Ist diese Option aktiviert, werden alle Tags der Elemente \fI<html>\fR, \fI<head>\fR, und \fI<body>\fR für die Ausgabe verworfen, wie auch die End-Tags \fI</p>\fR, \fI</li>\fR, \fI</dt>\fR, \fI</dd>\fR, \fI</option>\fR, \fI</tr>\fR, \fI</td>\fR, und \fI</th>\fR. 
+.sp 1
+Diese Option wird für XML-Ausgaben ignoriert.
+.TP
+\fB--priority-attributes\fR \fIAttributes Names\fR
+.br
+Supported values: \fBattributeX, attributeY, ...\fR
+
+Mit dieser Option können Sie bestimmen, dass Attribute Vorrang vor anderen haben und, im Ausgabedokument, den anderen Attributen eines Elements vorangestellt werden. Zum Beispiel können Sie festlegen, dass \fBid\fR und \fBname\fR vor allen anderen Attributen genannt werden. 
+.sp 1
+Die Option erwartet als Wert eine Liste von leerzeichen- oder kommaseparierten Attributnamen.
+.TP
+\fB--punctuation-wrap\fR \fIBoolean\fR (\fBno\fR if unset)
+.br
+This option specifies if Tidy should line wrap after some Unicode or Chinese punctuation characters.
+.TP
+\fB--sort-attributes\fR \fIEnum\fR (\fBnone\fR if unset)
+.br
+Supported values: \fBnone, alpha\fR
+
+Diese Option legt fest, dass Tidy Attribute innerhalb eines Elements anhand eines bestimmten Algorithmus sortieren soll. Wenn hier \fBalpha\fR gewählt wird, wird in aufsteigender, alphabetischer Reihenfolge sortiert. 
+.sp 1
+Wenn dagegen gleichzeitig \fIpriority-attributes\fR verwendet wird, werden zunächst die priorisierten Attribute ausgegeben, bevor die restlichen sortiert werden.
+
+See also: \fB--priority-attributes\fR
+.TP
+\fB--tab-size\fR \fIInteger\fR (\fB8\fR if unset)
+.br
+Diese Option legt die Anzahl der Spalten fest, die Tidy zwischen aufeinanderfolgenden Tabulatorzeichen vorsieht. Damit werden beim Lesen der Eingabe Tabulatoren in Leerzeichen umgewandelt.
+.TP
+\fB--tidy-mark\fR \fIBoolean\fR (\fByes\fR if unset)
+.br
+This option specifies if Tidy should add a \fImeta\fR element to the document head to indicate that the document has been tidied. 
+.sp 1
+Tidy won't add a meta element if one is already present.
+.TP
+\fB--vertical-space\fR \fIEnum\fR (\fBno\fR if unset)
+.br
+Supported values: \fBno, yes, auto\fR
+
+This option specifies if Tidy should add some extra empty lines for readability. 
+.sp 1
+The default is \fBno\fR. 
+.sp 1
+If set to \fBauto\fR Tidy will eliminate nearly all newline characters.
+.TP
+\fB--wrap\fR \fIInteger\fR (\fB68\fR if unset)
+.br
+Diese Option legt den rechten Rand für Zeilenumbrüche fest. 
+.sp 1
+Tidy wird versuchen, Zeilen so umzubrechen, dass sie diese Länge nicht überschreiten. 
+.sp 1
+Setzen Sie \fIwrap\fR auf \fB0\fR (Null), wenn Sie Zeilenumbrüche unterbinden möchten.
+.TP
+\fB--wrap-asp\fR \fIBoolean\fR (\fByes\fR if unset)
+.br
+Mit dieser Option können Sie festlegen, ob Tidy Text innerhalb von ASP Pseudoelementen, wie \fI<% ... %>\fR, umbrechen soll.
+.TP
+\fB--wrap-attributes\fR \fIBoolean\fR (\fBno\fR if unset)
+.br
+This option specifies if Tidy should line-wrap attribute values, meaning that if the value of an attribute causes a line to exceed the width specified by \fIwrap\fR, Tidy will add one or more line breaks to the value, causing it to be wrapped into multiple lines. 
+.sp 1
+Note that this option can be set independently of \fIwrap-script-literals\fR. By default Tidy replaces any newline or tab with a single space and replaces any sequences of whitespace with a single space. 
+.sp 1
+To force Tidy to preserve the original, literal values of all attributes, and ensure that whitespace characters within attribute values are passed through unchanged, set \fIliteral-attributes\fR to \fByes\fR.
+
+See also: \fB--wrap-script-literals\fR, \fB--literal-attributes\fR
+.TP
+\fB--wrap-jste\fR \fIBoolean\fR (\fByes\fR if unset)
+.br
+Mit dieser Option wird bestimmt, ob Tidy den Text innerhalb von JSTE Peseudo-Elementen, wie \fI<# ... #>\fR, umbrechen soll.
+.TP
+\fB--wrap-php\fR \fIBoolean\fR (\fBno\fR if unset)
+.br
+Diese Option legt fest, ob Tidy nach PHP Pseudoelementen, wie \fI<?php ... ?>\fR einen Zeilenumbruch einfügen soll.
+.TP
+\fB--wrap-script-literals\fR \fIBoolean\fR (\fBno\fR if unset)
+.br
+Mit dieser Option wird bestimmt, ob Tidy Literale, die in Skript-Attributen auftauchen, umbrechen soll.
+
+See also: \fB--wrap-attributes\fR
+.TP
+\fB--wrap-sections\fR \fIBoolean\fR (\fByes\fR if unset)
+.br
+This option specifies if Tidy should line wrap text contained within \fI<![ ... ]>\fR section tags.
+.SH ENVIRONMENT
+.TP
+.B HTML_TIDY
+Name of the default configuration file.  This should be an absolute path,
+since you will probably invoke \fBtidy\fR from different directories.  
+The value of HTML_TIDY will be parsed after the compiled-in default
+(defined with -DTIDY_CONFIG_FILE), but before any of the files specified
+using \fB-config\fR.
+
+.TP
+.B RUNTIME CONFIGURATION FILES
+You can also specify runtime configuration files from which \fBtidy\fR will
+attempt to load a configuration automatically.
+.IP
+The system runtime configuration file (/etc/tidy.conf),
+if it exists will be loaded and applied first, followed by the user runtime
+configuration file (~/.tidyrc).
+Subsequent usage of a specific option will override any previous usage.
+.IP
+Note that if you use the \fBHTML_TIDY\fR environment variable, then the user
+runtime configuration file will not be used. This is a feature, not a bug.
+
+.SH "EXIT STATUS"
+.IP 0
+All input files were processed successfully.
+.IP 1
+There were warnings.
+.IP 2
+There were errors.
+
+.SH SEE ALSO
+For more information about HTML Tidy:
+.RS 4
+.LP
+https://www.html-tidy.org/
+.RE
+.LP
+For more information on HTML:
+.RS 4
+.LP
+\fBHTML Living Standard\fR (the latest HTML specification)
+.br
+https://html.spec.whatwg.org/multipage/
+.RE
+.LP
+For bug reports and comments:
+.RS 4
+.LP
+https://github.com/htacg/tidy-html5/issues/
+.RE
+.LP
+Or send questions and comments to \fBpublic-htacg@w3.org\fR.
+.LP
+Validate your HTML documents using the \fBW3C Nu Markup Validator\fR:
+.RS 4
+.LP
+https://validator.w3.org/nu/
+.RE
+.SH AUTHOR
+\fBTidy\fR was written by \fBDave Raggett\fR <dsr@w3.org>,
+and subsequently maintained by a team at http://tidy.sourceforge.net/,
+and now maintained by \fBHTACG\fR (https://www.htacg.org).
+.LP
+The sources for \fBHTML Tidy\fR are available at
+https://github.com/htacg/tidy-html5/ under the MIT Licence.
