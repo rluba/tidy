@@ -11,6 +11,10 @@ main :: () {
 
     doc := tidyCreate();
     defer tidyRelease(doc);
+
+    // Disable wrapping
+    tidyOptSetInt(doc, .WrapLen, 0);
+
     error_buffer: TidyBuffer;
     defer tidyBufFree(*error_buffer);
     result := tidySetErrorBuffer(doc, *error_buffer);
@@ -54,7 +58,7 @@ dump_node :: (doc: TidyDoc, node: TidyNode, indent := 0) {
 
         name: string;
         if tidyNodeGetType(child) == {
-            case .TidyNode_Text;
+            case .Text;
                 for 1..indent print("    ");
                 buffer: TidyBuffer;
                 defer tidyBufFree(*buffer);
@@ -63,17 +67,17 @@ dump_node :: (doc: TidyDoc, node: TidyNode, indent := 0) {
                 if text.count text.count -= 1; // Remove extra newline
                 print("%\n", text);
 
-            case .TidyNode_Start;
+            case .Start;
                 for 1..indent print("    ");
                 name = to_string(tidyNodeGetName(child));
                 print("<%>\n", name);
 
-            case .TidyNode_End;
+            case .End;
                 for 1..indent print("    ");
                 name = to_string(tidyNodeGetName(child));
                 print("</%>\n", name);
 
-            case .TidyNode_StartEnd;
+            case .StartEnd;
                 for 1..indent print("    ");
                 name = to_string(tidyNodeGetName(child));
                 print("<%/>\n", name);
@@ -81,7 +85,7 @@ dump_node :: (doc: TidyDoc, node: TidyNode, indent := 0) {
 
         dump_node(doc, child, indent + 1);
 
-        if tidyNodeGetType(child) == .TidyNode_Start {
+        if tidyNodeGetType(child) == .Start {
             for 1..indent print("    ");
             print("</%>\n", name);
         }

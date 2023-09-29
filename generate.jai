@@ -65,11 +65,10 @@ generate_bindings :: () -> bool {
         array_add(*include_paths, libtidy_include_path);
         array_add(*source_files,  tprint("%/tidy.h", libtidy_include_path));
         array_add(*source_files,  tprint("%/tidybuffio.h", libtidy_include_path));
-        // array_add(*strip_prefixes, "HPDF");
-        // auto_detect_enum_prefixes = false;
+        array_add(*strip_enum_value_prefixes, .["TidyOptionId", "Tidy"]);
+        alias_original_enum_names = false;
         log_stripped_declarations = true;
         generate_compile_time_struct_checks = true;
-        // strip_flags |= .INLINED_FUNCTIONS; // "inline" functions are not present in the static library.
 
         visitor   = libtidy_visitor;
     }
@@ -164,29 +163,6 @@ libtidy_visitor :: (decl: *Declaration, parent_decl: *Declaration) -> Declaratio
             decl.decl_flags |= .OMIT_FROM_OUTPUT;
             return .STOP;
         }
-
-		// if (begins_with(decl.name, "HPDF_COUNTRY_") || begins_with(decl.name, "HPDF_LANG_")) {
-		// 	decl.decl_flags |= .OMIT_FROM_OUTPUT;
-		// 	return .STOP;
-		// }
-
-        // if decl.kind == .TYPEDEF {
-		// 	inner_name := tprint("_%", decl.name);
-		// 	for context.generator.global_scope.members {
-		// 		if it.name != inner_name     continue;
-
-		// 		// Don't output the typedef
-		// 		decl.decl_flags |= .OMIT_FROM_OUTPUT;
-
-		// 		// Keep the comment, if there is one:
-		// 		if decl.comment.text && !it.comment.text {
-		// 			it.comment = decl.comment;
-		// 		}
-
-		// 		it.output_name = decl.output_name;
-		// 		break;
-		// 	}
-        // }
     }
 
     return .RECURSE;

@@ -1,7 +1,7 @@
 //
 // This file was auto-generated using the following command:
 //
-// jai -no_color -quiet generate.jai
+// jai generate.jai
 //
 
 
@@ -46,118 +46,118 @@ TidyIterator :: *_TidyIterator;
 **         `language_en.h`, too.
 */
 TidyOptionId :: enum u32 {
-    TidyUnknownOption           :: 0;
+    UnknownOption           :: 0;
 
-    TidyAccessibilityCheckLevel :: 1;
-    TidyAltText                 :: 2;
-    TidyAnchorAsName            :: 3;
-    TidyAsciiChars              :: 4;
-    TidyBlockTags               :: 5;
-    TidyBodyOnly                :: 6;
-    TidyBreakBeforeBR           :: 7;
-    TidyCharEncoding            :: 8;
-    TidyCoerceEndTags           :: 9;
-    TidyCSSPrefix               :: 10;
+    AccessibilityCheckLevel :: 1;
+    AltText                 :: 2;
+    AnchorAsName            :: 3;
+    AsciiChars              :: 4;
+    BlockTags               :: 5;
+    BodyOnly                :: 6;
+    BreakBeforeBR           :: 7;
+    CharEncoding            :: 8;
+    CoerceEndTags           :: 9;
+    CSSPrefix               :: 10;
 
-    TidyCustomTags              :: 11;
+    CustomTags              :: 11;
 
-    TidyDecorateInferredUL      :: 12;
-    TidyDoctype                 :: 13;
+    DecorateInferredUL      :: 12;
+    Doctype                 :: 13;
 
-    TidyDoctypeMode             :: 14;
+    DoctypeMode             :: 14;
 
-    TidyDropEmptyElems          :: 15;
-    TidyDropEmptyParas          :: 16;
-    TidyDropPropAttrs           :: 17;
-    TidyDuplicateAttrs          :: 18;
-    TidyEmacs                   :: 19;
+    DropEmptyElems          :: 15;
+    DropEmptyParas          :: 16;
+    DropPropAttrs           :: 17;
+    DuplicateAttrs          :: 18;
+    Emacs                   :: 19;
 
-    TidyEmacsFile               :: 20;
+    EmacsFile               :: 20;
 
-    TidyEmptyTags               :: 21;
-    TidyEncloseBlockText        :: 22;
-    TidyEncloseBodyText         :: 23;
-    TidyErrFile                 :: 24;
-    TidyEscapeCdata             :: 25;
-    TidyEscapeScripts           :: 26;
-    TidyFixBackslash            :: 27;
-    TidyFixComments             :: 28;
-    TidyFixUri                  :: 29;
-    TidyForceOutput             :: 30;
-    TidyGDocClean               :: 31;
-    TidyHideComments            :: 32;
-    TidyHtmlOut                 :: 33;
-    TidyInCharEncoding          :: 34;
-    TidyIndentAttributes        :: 35;
-    TidyIndentCdata             :: 36;
-    TidyIndentContent           :: 37;
-    TidyIndentSpaces            :: 38;
-    TidyInlineTags              :: 39;
-    TidyJoinClasses             :: 40;
-    TidyJoinStyles              :: 41;
-    TidyKeepFileTimes           :: 42;
-    TidyKeepTabs                :: 43;
-    TidyLiteralAttribs          :: 44;
-    TidyLogicalEmphasis         :: 45;
-    TidyLowerLiterals           :: 46;
-    TidyMakeBare                :: 47;
-    TidyMakeClean               :: 48;
-    TidyMark                    :: 49;
-    TidyMergeDivs               :: 50;
-    TidyMergeEmphasis           :: 51;
-    TidyMergeSpans              :: 52;
-    TidyMetaCharset             :: 53;
-    TidyMuteReports             :: 54;
-    TidyMuteShow                :: 55;
-    TidyNCR                     :: 56;
-    TidyNewline                 :: 57;
-    TidyNumEntities             :: 58;
-    TidyOmitOptionalTags        :: 59;
-    TidyOutCharEncoding         :: 60;
-    TidyOutFile                 :: 61;
-    TidyOutputBOM               :: 62;
-    TidyPPrintTabs              :: 63;
-    TidyPreserveEntities        :: 64;
-    TidyPreTags                 :: 65;
-    TidyPriorityAttributes      :: 66;
-    TidyPunctWrap               :: 67;
-    TidyQuiet                   :: 68;
-    TidyQuoteAmpersand          :: 69;
-    TidyQuoteMarks              :: 70;
-    TidyQuoteNbsp               :: 71;
-    TidyReplaceColor            :: 72;
-    TidyShowErrors              :: 73;
-    TidyShowFilename            :: 74;
-    TidyShowInfo                :: 75;
-    TidyShowMarkup              :: 76;
-    TidyShowMetaChange          :: 77;
-    TidyShowWarnings            :: 78;
-    TidySkipNested              :: 79;
-    TidySortAttributes          :: 80;
-    TidyStrictTagsAttr          :: 81;
-    TidyStyleTags               :: 82;
-    TidyTabSize                 :: 83;
-    TidyUpperCaseAttrs          :: 84;
-    TidyUpperCaseTags           :: 85;
-    TidyUseCustomTags           :: 86;
-    TidyVertSpace               :: 87;
-    TidyWarnPropAttrs           :: 88;
-    TidyWord2000                :: 89;
-    TidyWrapAsp                 :: 90;
-    TidyWrapAttVals             :: 91;
-    TidyWrapJste                :: 92;
-    TidyWrapLen                 :: 93;
-    TidyWrapPhp                 :: 94;
-    TidyWrapScriptlets          :: 95;
-    TidyWrapSection             :: 96;
-    TidyWriteBack               :: 97;
-    TidyXhtmlOut                :: 98;
-    TidyXmlDecl                 :: 99;
-    TidyXmlOut                  :: 100;
-    TidyXmlPIs                  :: 101;
-    TidyXmlSpace                :: 102;
-    TidyXmlTags                 :: 103;
-    N_TIDY_OPTIONS              :: 104;
+    EmptyTags               :: 21;
+    EncloseBlockText        :: 22;
+    EncloseBodyText         :: 23;
+    ErrFile                 :: 24;
+    EscapeCdata             :: 25;
+    EscapeScripts           :: 26;
+    FixBackslash            :: 27;
+    FixComments             :: 28;
+    FixUri                  :: 29;
+    ForceOutput             :: 30;
+    GDocClean               :: 31;
+    HideComments            :: 32;
+    HtmlOut                 :: 33;
+    InCharEncoding          :: 34;
+    IndentAttributes        :: 35;
+    IndentCdata             :: 36;
+    IndentContent           :: 37;
+    IndentSpaces            :: 38;
+    InlineTags              :: 39;
+    JoinClasses             :: 40;
+    JoinStyles              :: 41;
+    KeepFileTimes           :: 42;
+    KeepTabs                :: 43;
+    LiteralAttribs          :: 44;
+    LogicalEmphasis         :: 45;
+    LowerLiterals           :: 46;
+    MakeBare                :: 47;
+    MakeClean               :: 48;
+    Mark                    :: 49;
+    MergeDivs               :: 50;
+    MergeEmphasis           :: 51;
+    MergeSpans              :: 52;
+    MetaCharset             :: 53;
+    MuteReports             :: 54;
+    MuteShow                :: 55;
+    NCR                     :: 56;
+    Newline                 :: 57;
+    NumEntities             :: 58;
+    OmitOptionalTags        :: 59;
+    OutCharEncoding         :: 60;
+    OutFile                 :: 61;
+    OutputBOM               :: 62;
+    PPrintTabs              :: 63;
+    PreserveEntities        :: 64;
+    PreTags                 :: 65;
+    PriorityAttributes      :: 66;
+    PunctWrap               :: 67;
+    Quiet                   :: 68;
+    QuoteAmpersand          :: 69;
+    QuoteMarks              :: 70;
+    QuoteNbsp               :: 71;
+    ReplaceColor            :: 72;
+    ShowErrors              :: 73;
+    ShowFilename            :: 74;
+    ShowInfo                :: 75;
+    ShowMarkup              :: 76;
+    ShowMetaChange          :: 77;
+    ShowWarnings            :: 78;
+    SkipNested              :: 79;
+    SortAttributes          :: 80;
+    StrictTagsAttr          :: 81;
+    StyleTags               :: 82;
+    TabSize                 :: 83;
+    UpperCaseAttrs          :: 84;
+    UpperCaseTags           :: 85;
+    UseCustomTags           :: 86;
+    VertSpace               :: 87;
+    WarnPropAttrs           :: 88;
+    Word2000                :: 89;
+    WrapAsp                 :: 90;
+    WrapAttVals             :: 91;
+    WrapJste                :: 92;
+    WrapLen                 :: 93;
+    WrapPhp                 :: 94;
+    WrapScriptlets          :: 95;
+    WrapSection             :: 96;
+    WriteBack               :: 97;
+    XhtmlOut                :: 98;
+    XmlDecl                 :: 99;
+    XmlOut                  :: 100;
+    XmlPIs                  :: 101;
+    XmlSpace                :: 102;
+    XmlTags                 :: 103;
+    N_TIDY_OPTIONS          :: 104;
 }
 
 /** Categories of Tidy configuration options, which are used mostly by user
@@ -183,20 +183,6 @@ TidyConfigCategory :: enum u32 {
     MarkupXForm      :: 310;
     PrettyPrint      :: 311;
     InternalCategory :: 312;
-
-    TidyUnknownCategory  :: UnknownCategory;
-    TidyDiagnostics      :: Diagnostics;
-    TidyDisplay          :: Display;
-    TidyDocumentIO       :: DocumentIO;
-    TidyEncoding         :: Encoding;
-    TidyFileIO           :: FileIO;
-    TidyMarkupCleanup    :: MarkupCleanup;
-    TidyMarkupEntities   :: MarkupEntities;
-    TidyMarkupRepair     :: MarkupRepair;
-    TidyMarkupTeach      :: MarkupTeach;
-    TidyMarkupXForm      :: MarkupXForm;
-    TidyPrettyPrint      :: PrettyPrint;
-    TidyInternalCategory :: InternalCategory;
 }
 
 /** A Tidy configuration option can have one of these data types. */
@@ -204,10 +190,6 @@ TidyOptionType :: enum u32 {
     String  :: 0;
     Integer :: 1;
     Boolean :: 2;
-
-    TidyString  :: String;
-    TidyInteger :: Integer;
-    TidyBoolean :: Boolean;
 }
 
 /** AutoBool values used by ParseBool, ParseTriState, ParseIndent, ParseBOM
@@ -217,10 +199,6 @@ TidyTriState :: enum u32 {
     NoState   :: 0;
     YesState  :: 1;
     AutoState :: 2;
-
-    TidyNoState   :: NoState;
-    TidyYesState  :: YesState;
-    TidyAutoState :: AutoState;
 }
 
 /** Values used by ParseUseCustomTags, which describes how Autonomous Custom
@@ -238,12 +216,6 @@ TidyUseCustomTagsState :: enum u32 {
     Empty      :: 2;
     Inline     :: 3;
     Pre        :: 4;
-
-    TidyCustomNo         :: No;
-    TidyCustomBlocklevel :: Blocklevel;
-    TidyCustomEmpty      :: Empty;
-    TidyCustomInline     :: Inline;
-    TidyCustomPre        :: Pre;
 }
 
 /** TidyNewline option values to control output line endings.
@@ -253,10 +225,6 @@ TidyLineEnding :: enum u32 {
     LF   :: 0;
     CRLF :: 1;
     CR   :: 2;
-
-    TidyLF   :: LF;
-    TidyCRLF :: CRLF;
-    TidyCR   :: CR;
 }
 
 /** TidyEncodingOptions option values specify the input and/or output encoding.
@@ -279,23 +247,6 @@ TidyEncodingOptions :: enum u32 {
     Utf16    :: 11;
     Big5     :: 12;
     Shiftjis :: 13;
-
-    TidyEncRaw      :: Raw;
-    TidyEncAscii    :: Ascii;
-    TidyEncLatin0   :: Latin0;
-    TidyEncLatin1   :: Latin1;
-    TidyEncUtf8     :: Utf8;
-
-    TidyEncIso2022  :: Iso2022;
-
-    TidyEncMac      :: Mac;
-    TidyEncWin1252  :: Win1252;
-    TidyEncIbm858   :: Ibm858;
-    TidyEncUtf16le  :: Utf16le;
-    TidyEncUtf16be  :: Utf16be;
-    TidyEncUtf16    :: Utf16;
-    TidyEncBig5     :: Big5;
-    TidyEncShiftjis :: Shiftjis;
 }
 
 /** Mode controlling treatment of doctype
@@ -308,13 +259,6 @@ TidyDoctypeModes :: enum u32 {
     Strict :: 3;
     Loose  :: 4;
     User   :: 5;
-
-    TidyDoctypeHtml5  :: Html5;
-    TidyDoctypeOmit   :: Omit;
-    TidyDoctypeAuto   :: Auto;
-    TidyDoctypeStrict :: Strict;
-    TidyDoctypeLoose  :: Loose;
-    TidyDoctypeUser   :: User;
 }
 
 /** Mode controlling treatment of duplicate Attributes
@@ -323,9 +267,6 @@ TidyDoctypeModes :: enum u32 {
 TidyDupAttrModes :: enum u32 {
     First :: 0;
     Last  :: 1;
-
-    TidyKeepFirst :: First;
-    TidyKeepLast  :: Last;
 }
 
 /** Mode controlling treatment of sorting attributes
@@ -334,9 +275,6 @@ TidyDupAttrModes :: enum u32 {
 TidyAttrSortStrategy :: enum u32 {
     None  :: 0;
     Alpha :: 1;
-
-    TidySortAttrNone  :: None;
-    TidySortAttrAlpha :: Alpha;
 }
 
 /** Mode controlling capitalization of things, such as attributes.
@@ -346,10 +284,6 @@ TidyUppercase :: enum u32 {
     No       :: 0;
     Yes      :: 1;
     Preserve :: 2;
-
-    TidyUppercaseNo       :: No;
-    TidyUppercaseYes      :: Yes;
-    TidyUppercasePreserve :: Preserve;
 }
 
 /** Node types
@@ -369,21 +303,6 @@ TidyNodeType :: enum u32 {
     Jste     :: 11;
     Php      :: 12;
     XmlDecl  :: 13;
-
-    TidyNode_Root     :: Root;
-    TidyNode_DocType  :: DocType;
-    TidyNode_Comment  :: Comment;
-    TidyNode_ProcIns  :: ProcIns;
-    TidyNode_Text     :: Text;
-    TidyNode_Start    :: Start;
-    TidyNode_End      :: End;
-    TidyNode_StartEnd :: StartEnd;
-    TidyNode_CDATA    :: CDATA;
-    TidyNode_Section  :: Section;
-    TidyNode_Asp      :: Asp;
-    TidyNode_Jste     :: Jste;
-    TidyNode_Php      :: Php;
-    TidyNode_XmlDecl  :: XmlDecl;
 }
 
 /** Known HTML element types
@@ -927,18 +846,6 @@ TidyReportLevel :: enum u32 {
     DialogueInfo     :: 358;
     DialogueFootnote :: 359;
     DialogueDoc      :: 359;
-
-    TidyInfo             :: Info;
-    TidyWarning          :: Warning;
-    TidyConfig           :: Config;
-    TidyAccess           :: Access;
-    TidyError            :: Error;
-    TidyBadDocument      :: BadDocument;
-    TidyFatal            :: Fatal;
-    TidyDialogueSummary  :: DialogueSummary;
-    TidyDialogueInfo     :: DialogueInfo;
-    TidyDialogueFootnote :: DialogueFootnote;
-    TidyDialogueDoc      :: DialogueDoc;
 }
 
 /** Indicates the data type of a format string parameter used when Tidy
@@ -951,12 +858,6 @@ TidyFormatParameterType :: enum u32 {
     STRING  :: 2;
     DOUBLE  :: 3;
     UNKNOWN :: 20;
-
-    tidyFormatType_INT     :: INT;
-    tidyFormatType_UINT    :: UINT;
-    tidyFormatType_STRING  :: STRING;
-    tidyFormatType_DOUBLE  :: DOUBLE;
-    tidyFormatType_UNKNOWN :: UNKNOWN;
 }
 
 /** The enumeration contains a list of every possible string that Tidy and the
