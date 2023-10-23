@@ -58,31 +58,34 @@ main :: () {
         push_allocator(pool_allocator_proc, *pool);
 
         tidy_allocator := create_tidy_allocator();
-        doc := tidyCreateWithAllocator(tidy_allocator);
-
-        // Disable wrapping
-        tidyOptSetInt(doc, .WrapLen, 0);
-
-        error_buffer: TidyBuffer;
-        defer tidyBufFree(*error_buffer);
-        result := tidySetErrorBuffer(doc, *error_buffer);
-        check_for_error(result);
-
         {
-            result = tidyParseString(doc, trix_html.data);
+            doc := tidyCreateWithAllocator(tidy_allocator);
+
+            // Disable wrapping
+            tidyOptSetInt(doc, .WrapLen, 0);
+
+            error_buffer: TidyBuffer;
+            tidyBufInitWithAllocator(*error_buffer, tidy_allocator);
+
+            result := tidySetErrorBuffer(doc, *error_buffer);
             check_for_error(result);
 
-            output_buffer: TidyBuffer;
-            defer tidyBufFree(*output_buffer);
-            result = tidySaveBuffer(doc, *output_buffer);
-            check_for_error(result);
+            {
+                result = tidyParseString(doc, trix_html.data);
+                check_for_error(result);
 
-            log("Result:\n%", to_string(output_buffer.bp));
-            dump_node(doc, tidyGetBody(doc));
+                output_buffer: TidyBuffer;
+                tidyBufInitWithAllocator(*output_buffer, tidy_allocator);
+                result = tidySaveBuffer(doc, *output_buffer);
+                check_for_error(result);
+
+                log("Result:\n%", to_string(output_buffer.bp));
+                dump_node(doc, tidyGetBody(doc));
+            }
+
+            error_string := to_string(error_buffer.bp);
+            if error_string log("Diagnostics: %", to_string(error_buffer.bp));
         }
-
-        error_string := to_string(error_buffer.bp);
-        if error_string log("Diagnostics: %", to_string(error_buffer.bp));
 
         inband, outband := calculate_used_memory(pool);
         log("This example used % bytes of pool memory + % outband allocationso of at least % each", inband, outband, pool.oversized_size);
