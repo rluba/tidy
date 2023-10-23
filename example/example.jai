@@ -9,46 +9,84 @@ main :: () {
         }
     }
 
-    doc := tidyCreate();
-    defer tidyRelease(doc);
-
-    // Disable wrapping
-    tidyOptSetInt(doc, .WrapLen, 0);
-
-    error_buffer: TidyBuffer;
-    defer tidyBufFree(*error_buffer);
-    result := tidySetErrorBuffer(doc, *error_buffer);
-    check_for_error(result);
-
+    // Example 1: Use tidy’s built-in allocator (which means you have to be careful about freeing stuff!)
     {
-        result = tidyParseString(doc, trix_html.data);
+        doc := tidyCreate();
+        defer tidyRelease(doc);
+
+        // Disable wrapping
+        tidyOptSetInt(doc, .WrapLen, 0);
+
+        error_buffer: TidyBuffer;
+        defer tidyBufFree(*error_buffer);
+        result := tidySetErrorBuffer(doc, *error_buffer);
         check_for_error(result);
 
-        output_buffer: TidyBuffer;
-        defer tidyBufFree(*output_buffer);
-        result = tidySaveBuffer(doc, *output_buffer);
-        check_for_error(result);
+        {
+            result = tidyParseString(doc, trix_html.data);
+            check_for_error(result);
 
-        log("Result:\n%", to_string(output_buffer.bp));
-        dump_node(doc, tidyGetBody(doc));
+            output_buffer: TidyBuffer;
+            defer tidyBufFree(*output_buffer);
+            result = tidySaveBuffer(doc, *output_buffer);
+            check_for_error(result);
+
+            log("Result:\n%", to_string(output_buffer.bp));
+            dump_node(doc, tidyGetBody(doc));
+        }
+        {
+            result = tidyParseString(doc, trix_html2.data);
+            check_for_error(result);
+
+            output_buffer: TidyBuffer;
+            defer tidyBufFree(*output_buffer);
+            result = tidySaveBuffer(doc, *output_buffer);
+            check_for_error(result);
+
+            log("Result 2:\n%", to_string(output_buffer.bp));
+            dump_node(doc, tidyGetBody(doc));
+        }
+
+        error_string := to_string(error_buffer.bp);
+        if error_string log("Diagnostics: %", to_string(error_buffer.bp));
     }
+
+    // Example 2: Use a jai allocator instead of tidy’s allocator
     {
-        result = tidyParseString(doc, trix_html2.data);
+        pool: Pool;
+        set_allocators(*pool);
+        push_allocator(pool_allocator_proc, *pool);
+
+        tidy_allocator := create_tidy_allocator();
+        doc := tidyCreateWithAllocator(tidy_allocator);
+
+        // Disable wrapping
+        tidyOptSetInt(doc, .WrapLen, 0);
+
+        error_buffer: TidyBuffer;
+        defer tidyBufFree(*error_buffer);
+        result := tidySetErrorBuffer(doc, *error_buffer);
         check_for_error(result);
 
-        output_buffer: TidyBuffer;
-        defer tidyBufFree(*output_buffer);
-        result = tidySaveBuffer(doc, *output_buffer);
-        check_for_error(result);
+        {
+            result = tidyParseString(doc, trix_html.data);
+            check_for_error(result);
 
-        log("Result 2:\n%", to_string(output_buffer.bp));
-        dump_node(doc, tidyGetBody(doc));
+            output_buffer: TidyBuffer;
+            defer tidyBufFree(*output_buffer);
+            result = tidySaveBuffer(doc, *output_buffer);
+            check_for_error(result);
+
+            log("Result:\n%", to_string(output_buffer.bp));
+            dump_node(doc, tidyGetBody(doc));
+        }
+
+        error_string := to_string(error_buffer.bp);
+        if error_string log("Diagnostics: %", to_string(error_buffer.bp));
+
+        inband, outband := calculate_used_memory(pool);
+        log("This example used % bytes of pool memory + % outband allocationso of at least % each", inband, outband, pool.oversized_size);
     }
-
-    error_string := to_string(error_buffer.bp);
-    if error_string log("Diagnostics: %", to_string(error_buffer.bp));
-
-
 }
 
 dump_node :: (doc: TidyDoc, node: TidyNode, indent := 0) {
@@ -95,3 +133,4 @@ dump_node :: (doc: TidyDoc, node: TidyNode, indent := 0) {
 #import,file "../module.jai";
 
 #import "Basic";
+#import "Pool";
