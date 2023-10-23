@@ -178,8 +178,8 @@ libtidy_visitor :: (decl: *Declaration, parent_decl: *Declaration) -> Declaratio
 
 FOOTER_UNIX :: #string END
 
-#if OS == .MACOS    libtidy :: #library,no_dll "macos/lib/libtidy";
-#if OS == .LINUX    libtidy :: #library,no_dll "linux/lib/libtidy";
+#if OS == .MACOS    libtidy :: #library "macos/lib/libtidy";
+#if OS == .LINUX    libtidy :: #library "linux/lib/libtidy";
 
 END
 

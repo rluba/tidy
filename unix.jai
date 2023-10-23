@@ -2802,6 +2802,6 @@ tidyInitOutputBuffer :: (outp: *TidyOutputSink, buf: *TidyBuffer) -> void #forei
 }
 
 
-#if OS == .MACOS    libtidy :: #library,no_dll "macos/lib/libtidy";
-#if OS == .LINUX    libtidy :: #library,no_dll "linux/lib/libtidy";
+#if OS == .MACOS    libtidy :: #library "macos/lib/libtidy";
+#if OS == .LINUX    libtidy :: #library "linux/lib/libtidy";
 
