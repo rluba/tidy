@@ -1,6 +1,7 @@
 AT_COMPILE_TIME :: true;
 
 COMPILE       :: false; // Enable to compile the tidy-html5 library from source before generating bindings.
+COMPILE_DEBUG :: true;  // Build a debug version of tidy?
 
 LIBTIDY_PATH :: "source";
 
@@ -65,9 +66,11 @@ generate_bindings :: () -> bool {
         array_add(*include_paths, libtidy_include_path);
         array_add(*source_files,  tprint("%/tidy.h", libtidy_include_path));
         array_add(*source_files,  tprint("%/tidybuffio.h", libtidy_include_path));
+
         array_add(*strip_enum_value_prefixes, .["TidyOptionId", "Tidy"]);
-        alias_original_enum_names = false;
-        log_stripped_declarations = true;
+
+        alias_original_enum_names           = false;
+        log_stripped_declarations           = true;
         generate_compile_time_struct_checks = true;
 
         visitor   = libtidy_visitor;
@@ -121,6 +124,10 @@ build_libtidy :: () -> bool {
         tprint("-DCMAKE_PREFIX_PATH=%",    install_dir),
 	);
 
+    if COMPILE_DEBUG {
+        array_add(*config_command, "-DCMAKE_BUILD_TYPE=Debug");
+    }
+
     #if OS == .MACOS {
         using options := get_build_options();
         array_add(*config_command, tprint("-DCMAKE_OSX_DEPLOYMENT_TARGET=%.%", minimum_macos_version.major, minimum_macos_version.minor));
@@ -162,6 +169,12 @@ libtidy_visitor :: (decl: *Declaration, parent_decl: *Declaration) -> Declaratio
         if array_find(DECLARATIONS_TO_OMIT, decl.name) {
             decl.decl_flags |= .OMIT_FROM_OUTPUT;
             return .STOP;
+        }
+
+        // Remove the "tidy" prefix from function names
+        if decl.kind == .FUNCTION && decl.output_name.count > 4 && begins_with(decl.output_name, "tidy") && decl.output_name != "tidyCreate" {
+            decl.output_name = slice(decl.output_name, 4, decl.output_name.count - 4);
+            decl.output_name[0] = to_lower(decl.output_name[0]);
         }
     }
 

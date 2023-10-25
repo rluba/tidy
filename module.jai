@@ -19,6 +19,60 @@ create_tidy_allocator :: () -> *TidyAllocator {
 
 #load "unix.jai";
 
+//
+// Helpers for debugging:
+//
+
+// Logs all nodes in the body
+debug_log_nodes :: (doc: TidyDoc) {
+    push_allocator(temp);
+    builder: String_Builder;
+    debug_append_node(*builder, doc, getBody(doc));
+    log("Nodes: %", builder_to_string(*builder));
+}
+
+debug_append_node :: (builder: *String_Builder, doc: TidyDoc, node: TidyNode, indent := 0) {
+    child := getChild(node);
+    while child {
+        defer child = getNext(child);
+
+        name: string;
+        if nodeGetType(child) == {
+            case .Text;
+                for 1..indent append(builder, "    ");
+                buffer: TidyBuffer;
+                defer bufFree(*buffer);
+                nodeGetText(doc, child, *buffer);
+                text := to_string(buffer.bp);
+                if text.count text.count -= 1; // Remove extra newline
+                print_to_builder(builder, "%\n", text);
+
+            case .Start;
+                for 1..indent append(builder, "    ");
+                name = to_string(nodeGetName(child));
+                print_to_builder(builder, "<%>\n", name);
+
+            case .End;
+                for 1..indent append(builder, "    ");
+                name = to_string(nodeGetName(child));
+                print_to_builder(builder, "</%>\n", name);
+
+            case .StartEnd;
+                for 1..indent append(builder, "    ");
+                name = to_string(nodeGetName(child));
+                print_to_builder(builder, "<%/>\n", name);
+        }
+
+        debug_append_node(builder, doc, child, indent + 1);
+
+        if nodeGetType(child) == .Start {
+            for 1..indent append(builder, "    ");
+            print_to_builder(builder, "</%>\n", name);
+        }
+    }
+}
+
+
 #scope_file
 
 jai_tidy_alloc ::(self: *TidyAllocator, nBytes: u64) -> *void #c_call {

@@ -9,49 +9,49 @@ main :: () {
         }
     }
 
-    // Example 1: Use tidy’s built-in allocator (which means you have to be careful about freeing stuff!)
+    // Example 1: Using tidy’s built-in allocator (which means you have to be careful about freeing stuff!)
     {
         doc := tidyCreate();
-        defer tidyRelease(doc);
+        defer release(doc);
 
         // Disable wrapping
-        tidyOptSetInt(doc, .WrapLen, 0);
+        optSetInt(doc, .WrapLen, 0);
 
         error_buffer: TidyBuffer;
-        defer tidyBufFree(*error_buffer);
-        result := tidySetErrorBuffer(doc, *error_buffer);
+        defer bufFree(*error_buffer);
+        result := setErrorBuffer(doc, *error_buffer);
         check_for_error(result);
 
         {
-            result = tidyParseString(doc, trix_html.data);
+            result =parseString(doc, trix_html.data);
             check_for_error(result);
 
             output_buffer: TidyBuffer;
-            defer tidyBufFree(*output_buffer);
-            result = tidySaveBuffer(doc, *output_buffer);
+            defer bufFree(*output_buffer);
+            result = saveBuffer(doc, *output_buffer);
             check_for_error(result);
 
             log("Result:\n%", to_string(output_buffer.bp));
-            dump_node(doc, tidyGetBody(doc));
+            debug_log_nodes(doc);
         }
         {
-            result = tidyParseString(doc, trix_html2.data);
+            result = parseString(doc, trix_html2.data);
             check_for_error(result);
 
             output_buffer: TidyBuffer;
-            defer tidyBufFree(*output_buffer);
-            result = tidySaveBuffer(doc, *output_buffer);
+            defer bufFree(*output_buffer);
+            result = saveBuffer(doc, *output_buffer);
             check_for_error(result);
 
             log("Result 2:\n%", to_string(output_buffer.bp));
-            dump_node(doc, tidyGetBody(doc));
+            debug_log_nodes(doc);
         }
 
         error_string := to_string(error_buffer.bp);
         if error_string log("Diagnostics: %", to_string(error_buffer.bp));
     }
 
-    // Example 2: Use a jai allocator instead of tidy’s allocator
+    // Example 2: Using a jai allocator instead of tidy’s allocator
     {
         pool: Pool;
         set_allocators(*pool);
@@ -59,28 +59,28 @@ main :: () {
 
         tidy_allocator := create_tidy_allocator();
         {
-            doc := tidyCreateWithAllocator(tidy_allocator);
+            doc := createWithAllocator(tidy_allocator);
 
             // Disable wrapping
-            tidyOptSetInt(doc, .WrapLen, 0);
+            optSetInt(doc, .WrapLen, 0);
 
             error_buffer: TidyBuffer;
-            tidyBufInitWithAllocator(*error_buffer, tidy_allocator);
+            bufInitWithAllocator(*error_buffer, tidy_allocator);
 
-            result := tidySetErrorBuffer(doc, *error_buffer);
+            result := setErrorBuffer(doc, *error_buffer);
             check_for_error(result);
 
             {
-                result = tidyParseString(doc, trix_html.data);
+                result = parseString(doc, trix_html.data);
                 check_for_error(result);
 
                 output_buffer: TidyBuffer;
-                tidyBufInitWithAllocator(*output_buffer, tidy_allocator);
-                result = tidySaveBuffer(doc, *output_buffer);
+                bufInitWithAllocator(*output_buffer, tidy_allocator);
+                result = saveBuffer(doc, *output_buffer);
                 check_for_error(result);
 
                 log("Result:\n%", to_string(output_buffer.bp));
-                dump_node(doc, tidyGetBody(doc));
+                debug_log_nodes(doc);
             }
 
             error_string := to_string(error_buffer.bp);
@@ -88,48 +88,7 @@ main :: () {
         }
 
         inband, outband := calculate_used_memory(pool);
-        log("This example used % bytes of pool memory + % outband allocationso of at least % each", inband, outband, pool.oversized_size);
-    }
-}
-
-dump_node :: (doc: TidyDoc, node: TidyNode, indent := 0) {
-    child := tidyGetChild(node);
-    while child {
-        defer child = tidyGetNext(child);
-
-        name: string;
-        if tidyNodeGetType(child) == {
-            case .Text;
-                for 1..indent print("    ");
-                buffer: TidyBuffer;
-                defer tidyBufFree(*buffer);
-                tidyNodeGetText(doc, child, *buffer);
-                text := to_string(buffer.bp);
-                if text.count text.count -= 1; // Remove extra newline
-                print("%\n", text);
-
-            case .Start;
-                for 1..indent print("    ");
-                name = to_string(tidyNodeGetName(child));
-                print("<%>\n", name);
-
-            case .End;
-                for 1..indent print("    ");
-                name = to_string(tidyNodeGetName(child));
-                print("</%>\n", name);
-
-            case .StartEnd;
-                for 1..indent print("    ");
-                name = to_string(tidyNodeGetName(child));
-                print("<%/>\n", name);
-        }
-
-        dump_node(doc, child, indent + 1);
-
-        if tidyNodeGetType(child) == .Start {
-            for 1..indent print("    ");
-            print("</%>\n", name);
-        }
+        log("This example used % bytes of pool memory + % outband allocations of at least % each", inband, outband, pool.oversized_size);
     }
 }
 

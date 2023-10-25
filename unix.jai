@@ -1300,16 +1300,16 @@ TidyFree :: #type (buf: *void) -> void #c_call;
 TidyPanic :: #type (mssg: ctmbstr) -> void #c_call;
 
 /** Give Tidy a `malloc()` replacement */
-tidySetMallocCall :: (fmalloc: TidyMalloc) -> Bool #foreign libtidy;
+setMallocCall :: (fmalloc: TidyMalloc) -> Bool #foreign libtidy "tidySetMallocCall";
 
 /** Give Tidy a `realloc()` replacement */
-tidySetReallocCall :: (frealloc: TidyRealloc) -> Bool #foreign libtidy;
+setReallocCall :: (frealloc: TidyRealloc) -> Bool #foreign libtidy "tidySetReallocCall";
 
 /** Give Tidy a `free()` replacement */
-tidySetFreeCall :: (ffree: TidyFree) -> Bool #foreign libtidy;
+setFreeCall :: (ffree: TidyFree) -> Bool #foreign libtidy "tidySetFreeCall";
 
 /** Give Tidy an "out of memory" handler */
-tidySetPanicCall :: (fpanic: TidyPanic) -> Bool #foreign libtidy;
+setPanicCall :: (fpanic: TidyPanic) -> Bool #foreign libtidy "tidySetPanicCall";
 
 /** The primary creation of a document instance. Instances of a TidyDoc are used
 ** throughout the API as a token to represent a particular document. You must
@@ -1326,40 +1326,40 @@ tidyCreate :: () -> TidyDoc #foreign libtidy;
 ** @param allocator The allocator to use for creating the document.
 ** @result Returns a TidyDoc instance.
 */
-tidyCreateWithAllocator :: (allocator: *TidyAllocator) -> TidyDoc #foreign libtidy;
+createWithAllocator :: (allocator: *TidyAllocator) -> TidyDoc #foreign libtidy "tidyCreateWithAllocator";
 
 /** Free all memory and release the TidyDoc. The TidyDoc can not be used after
 ** this call.
 ** @param tdoc The TidyDoc to free.
 */
-tidyRelease :: (tdoc: TidyDoc) -> void #foreign libtidy;
+release :: (tdoc: TidyDoc) -> void #foreign libtidy "tidyRelease";
 
 /** Allows the host application to store a chunk of data with each TidyDoc
 ** instance. This can be useful for callbacks, such as saving a reference to
 ** `self` within the document.
 */
-tidySetAppData :: (tdoc: TidyDoc, appData: *void) -> void #foreign libtidy;
+setAppData :: (tdoc: TidyDoc, appData: *void) -> void #foreign libtidy "tidySetAppData";
 
 /** Returns the data previously stored with `tidySetAppData()`.
 ** @param tdoc  document where data has been stored.
 ** @result The pointer to the data block previously stored.
 */
-tidyGetAppData :: (tdoc: TidyDoc) -> *void #foreign libtidy;
+getAppData :: (tdoc: TidyDoc) -> *void #foreign libtidy "tidyGetAppData";
 
 /** Get the release date for the current library.
 ** @result The string representing the release date.
 */
-tidyReleaseDate :: () -> ctmbstr #foreign libtidy;
+releaseDate :: () -> ctmbstr #foreign libtidy "tidyReleaseDate";
 
 /** Get the version number for the current library.
 ** @result The string representing the version number.
 */
-tidyLibraryVersion :: () -> ctmbstr #foreign libtidy;
+libraryVersion :: () -> ctmbstr #foreign libtidy "tidyLibraryVersion";
 
 /** Get the platform for which Tidy was built.
 ** @result The string representing the version number.
 */
-tidyPlatform :: () -> ctmbstr #foreign libtidy;
+platform :: () -> ctmbstr #foreign libtidy "tidyPlatform";
 
 /** Get status of current document.
 ** @param tdoc An instance of a TidyDoc to query.
@@ -1367,20 +1367,20 @@ tidyPlatform :: () -> ctmbstr #foreign libtidy;
 **         the document, `1` indicating warnings, and `0` in the case of
 **         everything being okay.
 */
-tidyStatus :: (tdoc: TidyDoc) -> s32 #foreign libtidy;
+status :: (tdoc: TidyDoc) -> s32 #foreign libtidy "tidyStatus";
 
 /** Gets the version of HTML that was output, as an integer, times 100. For
 ** example, HTML5 will return 500; HTML4.0.1 will return 401.
 ** @param tdoc An instance of a TidyDoc to query.
 ** @result Returns the HTML version number (x100).
 */
-tidyDetectedHtmlVersion :: (tdoc: TidyDoc) -> s32 #foreign libtidy;
+detectedHtmlVersion :: (tdoc: TidyDoc) -> s32 #foreign libtidy "tidyDetectedHtmlVersion";
 
 /** Indicates whether the output document is or isn't XHTML.
 ** @param tdoc An instance of a TidyDoc to query.
 ** @result Returns `yes` if the document is an XHTML type.
 */
-tidyDetectedXhtml :: (tdoc: TidyDoc) -> Bool #foreign libtidy;
+detectedXhtml :: (tdoc: TidyDoc) -> Bool #foreign libtidy "tidyDetectedXhtml";
 
 /** Indicates whether or not the input document was XML. If TidyXml tags is
 ** true, or there was an XML declaration in the input document, then this
@@ -1388,61 +1388,61 @@ tidyDetectedXhtml :: (tdoc: TidyDoc) -> Bool #foreign libtidy;
 ** @param tdoc An instance of a TidyDoc to query.
 ** @result Returns `yes` if the input document was XML.
 */
-tidyDetectedGenericXml :: (tdoc: TidyDoc) -> Bool #foreign libtidy;
+detectedGenericXml :: (tdoc: TidyDoc) -> Bool #foreign libtidy "tidyDetectedGenericXml";
 
 /** Indicates the number of TidyError messages that were generated. For any
 ** value greater than `0`, output is suppressed unless TidyForceOutput is set.
 ** @param tdoc An instance of a TidyDoc to query.
 ** @result Returns the number of TidyError messages that were generated.
 */
-tidyErrorCount :: (tdoc: TidyDoc) -> u32 #foreign libtidy;
+errorCount :: (tdoc: TidyDoc) -> u32 #foreign libtidy "tidyErrorCount";
 
 /** Indicates the number of TidyWarning messages that were generated.
 ** @param tdoc An instance of a TidyDoc to query.
 ** @result Returns the number of TidyWarning messages that were generated.
 */
-tidyWarningCount :: (tdoc: TidyDoc) -> u32 #foreign libtidy;
+warningCount :: (tdoc: TidyDoc) -> u32 #foreign libtidy "tidyWarningCount";
 
 /** Indicates the number of TidyAccess messages that were generated.
 ** @param tdoc An instance of a TidyDoc to query.
 ** @result Returns the number of TidyAccess messages that were generated.
 */
-tidyAccessWarningCount :: (tdoc: TidyDoc) -> u32 #foreign libtidy;
+accessWarningCount :: (tdoc: TidyDoc) -> u32 #foreign libtidy "tidyAccessWarningCount";
 
 /** Indicates the number of configuration error messages that were generated.
 ** @param tdoc An instance of a TidyDoc to query.
 ** @result Returns the number of configuration error messages that were
 **         generated.
 */
-tidyConfigErrorCount :: (tdoc: TidyDoc) -> u32 #foreign libtidy;
+configErrorCount :: (tdoc: TidyDoc) -> u32 #foreign libtidy "tidyConfigErrorCount";
 
 /** Write more complete information about errors to current error sink.
 ** @param tdoc An instance of a TidyDoc to query.
 */
-tidyErrorSummary :: (tdoc: TidyDoc) -> void #foreign libtidy;
+errorSummary :: (tdoc: TidyDoc) -> void #foreign libtidy "tidyErrorSummary";
 
 /** Write more general information about markup to current error sink.
 ** @param tdoc An instance of a TidyDoc to query.
 */
-tidyGeneralInfo :: (tdoc: TidyDoc) -> void #foreign libtidy;
+generalInfo :: (tdoc: TidyDoc) -> void #foreign libtidy "tidyGeneralInfo";
 
 /** Load an ASCII Tidy configuration file and set the configuration per its
 ** contents. Reports config option errors, which can be filtered.
 ** @result Returns 0 upon success, or any other value if there was an option error.
 */
-tidyLoadConfig :: (tdoc: TidyDoc, configFile: ctmbstr) -> s32 #foreign libtidy;
+loadConfig :: (tdoc: TidyDoc, configFile: ctmbstr) -> s32 #foreign libtidy "tidyLoadConfig";
 
 /** Load a Tidy configuration file with the specified character encoding, and
 ** set the configuration per its contents.  Reports config option errors, which can be filtered.
 ** @result Returns 0 upon success, or any other value if there was an option error.
 */
-tidyLoadConfigEnc :: (tdoc: TidyDoc, configFile: ctmbstr, charenc: ctmbstr) -> s32 #foreign libtidy;
+loadConfigEnc :: (tdoc: TidyDoc, configFile: ctmbstr, charenc: ctmbstr) -> s32 #foreign libtidy "tidyLoadConfigEnc";
 
 /** Determine whether or not a particular file exists. On Unix systems, the use
 ** of the tilde to represent the user's home directory is supported.
 ** @result Returns `yes` or `no`, indicating whether or not the file exists.
 */
-tidyFileExists :: (tdoc: TidyDoc, filename: ctmbstr) -> Bool #foreign libtidy;
+fileExists :: (tdoc: TidyDoc, filename: ctmbstr) -> Bool #foreign libtidy "tidyFileExists";
 
 /** Set the input/output character encoding for parsing markup. Valid values
 ** include `ascii`, `latin1`, `raw`, `utf8`, `iso2022`, `mac`, `win1252`,
@@ -1452,21 +1452,21 @@ tidyFileExists :: (tdoc: TidyDoc, filename: ctmbstr) -> Bool #foreign libtidy;
 **       TidySetOutCharEncoding() to set the same value.
 ** @result Returns 0 upon success, or a system standard error number `EINVAL`.
 */
-tidySetCharEncoding :: (tdoc: TidyDoc, encnam: ctmbstr) -> s32 #foreign libtidy;
+setCharEncoding :: (tdoc: TidyDoc, encnam: ctmbstr) -> s32 #foreign libtidy "tidySetCharEncoding";
 
 /** Set the input encoding for parsing markup.  Valid values include `ascii`,
 ** `latin1`, `raw`, `utf8`, `iso2022`, `mac`, `win1252`, `utf16le`, `utf16be`,
 ** `utf16`, `big5`, and `shiftjis`. These values are not case sensitive.
 ** @result Returns 0 upon success, or a system standard error number `EINVAL`.
 */
-tidySetInCharEncoding :: (tdoc: TidyDoc, encnam: ctmbstr) -> s32 #foreign libtidy;
+setInCharEncoding :: (tdoc: TidyDoc, encnam: ctmbstr) -> s32 #foreign libtidy "tidySetInCharEncoding";
 
 /** Set the input encoding for writing markup.  Valid values include `ascii`,
 ** `latin1`, `raw`, `utf8`, `iso2022`, `mac`, `win1252`, `utf16le`, `utf16be`,
 ** `utf16`, `big5`, and `shiftjis`. These values are not case sensitive.
 ** @result Returns 0 upon success, or a system standard error number `EINVAL`.
 */
-tidySetOutCharEncoding :: (tdoc: TidyDoc, encnam: ctmbstr) -> s32 #foreign libtidy;
+setOutCharEncoding :: (tdoc: TidyDoc, encnam: ctmbstr) -> s32 #foreign libtidy "tidySetOutCharEncoding";
 
 /** This typedef represents the required signature for your provided callback
 ** function should you wish to register one with tidySetOptionCallback().
@@ -1489,7 +1489,7 @@ TidyOptCallback :: #type (option: ctmbstr, value: ctmbstr) -> Bool #c_call;
 ** tidySetConfigCallback().
 ** @result Returns `yes` upon success.
 */
-tidySetOptionCallback :: (tdoc: TidyDoc, pOptCallback: TidyOptCallback) -> Bool #foreign libtidy;
+setOptionCallback :: (tdoc: TidyDoc, pOptCallback: TidyOptCallback) -> Bool #foreign libtidy "tidySetOptionCallback";
 
 /** This typedef represents the required signature for your provided callback
 ** function should you wish to register one with tidySetConfigCallback().
@@ -1509,7 +1509,7 @@ TidyConfigCallback :: #type (tdoc: TidyDoc, option: ctmbstr, value: ctmbstr) -> 
 ** after LibTidy has examined them and failed to recognize them.
 ** @result Returns `yes` upon success.
 */
-tidySetConfigCallback :: (tdoc: TidyDoc, pConfigCallback: TidyConfigCallback) -> Bool #foreign libtidy;
+setConfigCallback :: (tdoc: TidyDoc, pConfigCallback: TidyConfigCallback) -> Bool #foreign libtidy "tidySetConfigCallback";
 
 /** This typedef represents the required signature for your provided callback
 ** function should you wish to register one with tidySetConfigChangeCallback().
@@ -1526,20 +1526,20 @@ TidyConfigChangeCallback :: #type (tdoc: TidyDoc, option: TidyOption) -> void #c
 ** @note This callback is not currently implemented.
 ** @result Returns `yes` upon success.
 */
-tidySetConfigChangeCallback :: (tdoc: TidyDoc, pCallback: TidyConfigChangeCallback) -> Bool #foreign libtidy;
+setConfigChangeCallback :: (tdoc: TidyDoc, pCallback: TidyConfigChangeCallback) -> Bool #foreign libtidy "tidySetConfigChangeCallback";
 
 /** Get ID of given Option
 ** @param opt An instance of a TidyOption to query.
 ** @result The TidyOptionId of the given option.
 */
-tidyOptGetId :: (opt: TidyOption) -> TidyOptionId #foreign libtidy;
+optGetId :: (opt: TidyOption) -> TidyOptionId #foreign libtidy "tidyOptGetId";
 
 /** Returns the TidyOptionId (enum value) by providing the name of a Tidy
 ** configuration option.
 ** @param optnam The name of the option ID to retrieve.
 ** @result The TidyOptionId of the given `optname`.
 */
-tidyOptGetIdForName :: (optnam: ctmbstr) -> TidyOptionId #foreign libtidy;
+optGetIdForName :: (optnam: ctmbstr) -> TidyOptionId #foreign libtidy "tidyOptGetIdForName";
 
 /** Initiates an iterator for a list of TidyOption instances, which allows you
 ** to iterate through all of the available options. In order to iterate through
@@ -1557,7 +1557,7 @@ tidyOptGetIdForName :: (optnam: ctmbstr) -> TidyOptionId #foreign libtidy;
 ** @result Returns a TidyIterator, which is a token used to represent the
 **         current position in a list within LibTidy.
 */
-tidyGetOptionList :: (tdoc: TidyDoc) -> TidyIterator #foreign libtidy;
+getOptionList :: (tdoc: TidyDoc) -> TidyIterator #foreign libtidy "tidyGetOptionList";
 
 /** Given a valid TidyIterator initiated with tidyGetOptionList(), returns
 ** the instance of the next TidyOption.
@@ -1567,36 +1567,36 @@ tidyGetOptionList :: (tdoc: TidyDoc) -> TidyIterator #foreign libtidy;
 **       is okay to use in your application.
 ** @result An instance of TidyOption.
 */
-tidyGetNextOption :: (tdoc: TidyDoc, pos: *TidyIterator) -> TidyOption #foreign libtidy;
+getNextOption :: (tdoc: TidyDoc, pos: *TidyIterator) -> TidyOption #foreign libtidy "tidyGetNextOption";
 
 /** Retrieves an instance of TidyOption given a valid TidyOptionId.
 ** @result An instance of TidyOption matching the provided TidyOptionId.
 */
-tidyGetOption :: (tdoc: TidyDoc, optId: TidyOptionId) -> TidyOption #foreign libtidy;
+getOption :: (tdoc: TidyDoc, optId: TidyOptionId) -> TidyOption #foreign libtidy "tidyGetOption";
 
 /** Returns an instance of TidyOption by providing the name of a Tidy
 ** configuration option.
 ** @result The TidyOption of the given `optname`.
 */
-tidyGetOptionByName :: (tdoc: TidyDoc, optnam: ctmbstr) -> TidyOption #foreign libtidy;
+getOptionByName :: (tdoc: TidyDoc, optnam: ctmbstr) -> TidyOption #foreign libtidy "tidyGetOptionByName";
 
 /** Get name of given Option
 ** @param opt An instance of a TidyOption to query.
 ** @result The name of the given option.
 */
-tidyOptGetName :: (opt: TidyOption) -> ctmbstr #foreign libtidy;
+optGetName :: (opt: TidyOption) -> ctmbstr #foreign libtidy "tidyOptGetName";
 
 /** Get datatype of given Option
 ** @param opt An instance of a TidyOption to query.
 ** @result The TidyOptionType of the given option.
 */
-tidyOptGetType :: (opt: TidyOption) -> TidyOptionType #foreign libtidy;
+optGetType :: (opt: TidyOption) -> TidyOptionType #foreign libtidy "tidyOptGetType";
 
 /** Indicates that an option takes a list of items.
 ** @param opt An instance of a TidyOption to query.
 ** @result A bool indicating whether or not the option accepts a list.
 */
-tidyOptionIsList :: (opt: TidyOption) -> Bool #foreign libtidy;
+optionIsList :: (opt: TidyOption) -> Bool #foreign libtidy "tidyOptionIsList";
 
 /** Is Option read-only? Some options (mainly internal use only options) are
 ** read-only.
@@ -1607,32 +1607,32 @@ tidyOptionIsList :: (opt: TidyOption) -> Bool #foreign libtidy;
 ** @result Returns `yes` or `no` depending on whether or not the specified
 **         option is read-only.
 */
-tidyOptIsReadOnly :: (opt: TidyOption) -> Bool #foreign libtidy;
+optIsReadOnly :: (opt: TidyOption) -> Bool #foreign libtidy "tidyOptIsReadOnly";
 
 /** Get category of given Option
 ** @param opt An instance of a TidyOption to query.
 ** @result The TidyConfigCategory of the specified option.
 */
-tidyOptGetCategory :: (opt: TidyOption) -> TidyConfigCategory #foreign libtidy;
+optGetCategory :: (opt: TidyOption) -> TidyConfigCategory #foreign libtidy "tidyOptGetCategory";
 
 /** Get default value of given Option as a string
 ** @param opt An instance of a TidyOption to query.
 ** @result A string indicating the default value of the specified option.
 */
-tidyOptGetDefault :: (opt: TidyOption) -> ctmbstr #foreign libtidy;
+optGetDefault :: (opt: TidyOption) -> ctmbstr #foreign libtidy "tidyOptGetDefault";
 
 /** Get default value of given Option as an unsigned integer
 ** @param opt An instance of a TidyOption to query.
 ** @result An unsigned integer indicating the default value of the specified
 **         option.
 */
-tidyOptGetDefaultInt :: (opt: TidyOption) -> u64 #foreign libtidy;
+optGetDefaultInt :: (opt: TidyOption) -> u64 #foreign libtidy "tidyOptGetDefaultInt";
 
 /** Get default value of given Option as a Boolean value
 ** @param opt An instance of a TidyOption to query.
 ** @result A boolean indicating the default value of the specified option.
 */
-tidyOptGetDefaultBool :: (opt: TidyOption) -> Bool #foreign libtidy;
+optGetDefaultBool :: (opt: TidyOption) -> Bool #foreign libtidy "tidyOptGetDefaultBool";
 
 /** Initiates an iterator for a list of TidyOption pick-list values, which
 ** allows you iterate through all of the available option values. In order to
@@ -1649,61 +1649,61 @@ tidyOptGetDefaultBool :: (opt: TidyOption) -> Bool #foreign libtidy;
 ** @result Returns a TidyIterator, which is a token used to represent the
 **         current position in a list within LibTidy.
 */
-tidyOptGetPickList :: (opt: TidyOption) -> TidyIterator #foreign libtidy;
+optGetPickList :: (opt: TidyOption) -> TidyIterator #foreign libtidy "tidyOptGetPickList";
 
 /** Given a valid TidyIterator initiated with tidyOptGetPickList(), returns a
 ** string representing a possible option value.
 ** @result A string containing the next pick-list option value.
 */
-tidyOptGetNextPick :: (opt: TidyOption, pos: *TidyIterator) -> ctmbstr #foreign libtidy;
+optGetNextPick :: (opt: TidyOption, pos: *TidyIterator) -> ctmbstr #foreign libtidy "tidyOptGetNextPick";
 
 /** Get the current value of the option ID for the given document.
 ** @remark The optId *must* have a @ref TidyOptionType of @ref TidyString!
 */
-tidyOptGetValue :: (tdoc: TidyDoc, optId: TidyOptionId) -> ctmbstr #foreign libtidy;
+optGetValue :: (tdoc: TidyDoc, optId: TidyOptionId) -> ctmbstr #foreign libtidy "tidyOptGetValue";
 
 /** Set the option value as a string.
 ** @remark The optId *must* have a @ref TidyOptionType of @ref TidyString!
 ** @result Returns a bool indicating success or failure.
 */
-tidyOptSetValue :: (tdoc: TidyDoc, optId: TidyOptionId, val: ctmbstr) -> Bool #foreign libtidy;
+optSetValue :: (tdoc: TidyDoc, optId: TidyOptionId, val: ctmbstr) -> Bool #foreign libtidy "tidyOptSetValue";
 
 /** Set named option value as a string, regardless of the @ref TidyOptionType.
 ** @remark This is good setter if you are unsure of the type.
 ** @result Returns a bool indicating success or failure.
 */
-tidyOptParseValue :: (tdoc: TidyDoc, optnam: ctmbstr, val: ctmbstr) -> Bool #foreign libtidy;
+optParseValue :: (tdoc: TidyDoc, optnam: ctmbstr, val: ctmbstr) -> Bool #foreign libtidy "tidyOptParseValue";
 
 /** Get current option value as an integer.
 ** @result Returns the integer value of the specified option.
 */
-tidyOptGetInt :: (tdoc: TidyDoc, optId: TidyOptionId) -> u64 #foreign libtidy;
+optGetInt :: (tdoc: TidyDoc, optId: TidyOptionId) -> u64 #foreign libtidy "tidyOptGetInt";
 
 /** Set option value as an integer.
 ** @result Returns a bool indicating success or failure.
 */
-tidyOptSetInt :: (tdoc: TidyDoc, optId: TidyOptionId, val: u64) -> Bool #foreign libtidy;
+optSetInt :: (tdoc: TidyDoc, optId: TidyOptionId, val: u64) -> Bool #foreign libtidy "tidyOptSetInt";
 
 /** Get current option value as a Boolean flag.
 ** @result Returns a bool indicating the value.
 */
-tidyOptGetBool :: (tdoc: TidyDoc, optId: TidyOptionId) -> Bool #foreign libtidy;
+optGetBool :: (tdoc: TidyDoc, optId: TidyOptionId) -> Bool #foreign libtidy "tidyOptGetBool";
 
 /** Set option value as a Boolean flag.
 ** @result Returns a bool indicating success or failure.
 */
-tidyOptSetBool :: (tdoc: TidyDoc, optId: TidyOptionId, val: Bool) -> Bool #foreign libtidy;
+optSetBool :: (tdoc: TidyDoc, optId: TidyOptionId, val: Bool) -> Bool #foreign libtidy "tidyOptSetBool";
 
 /** Reset option to default value by ID.
 ** @result Returns a bool indicating success or failure.
 */
-tidyOptResetToDefault :: (tdoc: TidyDoc, opt: TidyOptionId) -> Bool #foreign libtidy;
+optResetToDefault :: (tdoc: TidyDoc, opt: TidyOptionId) -> Bool #foreign libtidy "tidyOptResetToDefault";
 
 /** Reset all options to their default values.
 ** @param tdoc The tidy document for which to reset all values.
 ** @result Returns a bool indicating success or failure.
 */
-tidyOptResetAllToDefault :: (tdoc: TidyDoc) -> Bool #foreign libtidy;
+optResetAllToDefault :: (tdoc: TidyDoc) -> Bool #foreign libtidy "tidyOptResetAllToDefault";
 
 /** Take a snapshot of current config settings. These settings are stored
 ** within the tidy document. Note, however, that snapshots do not reliably
@@ -1713,25 +1713,25 @@ tidyOptResetAllToDefault :: (tdoc: TidyDoc) -> Bool #foreign libtidy;
 ** @param tdoc The tidy document for which to take a snapshot.
 ** @result Returns a bool indicating success or failure.
 */
-tidyOptSnapshot :: (tdoc: TidyDoc) -> Bool #foreign libtidy;
+optSnapshot :: (tdoc: TidyDoc) -> Bool #foreign libtidy "tidyOptSnapshot";
 
 /** Apply a snapshot of config settings to a document.
 ** @param tdoc The tidy document for which to apply a snapshot.
 ** @result Returns a bool indicating success or failure.
 */
-tidyOptResetToSnapshot :: (tdoc: TidyDoc) -> Bool #foreign libtidy;
+optResetToSnapshot :: (tdoc: TidyDoc) -> Bool #foreign libtidy "tidyOptResetToSnapshot";
 
 /** Any settings different than default?
 ** @param tdoc The tidy document to check.
 ** @result Returns a bool indicating whether or not a difference exists.
 */
-tidyOptDiffThanDefault :: (tdoc: TidyDoc) -> Bool #foreign libtidy;
+optDiffThanDefault :: (tdoc: TidyDoc) -> Bool #foreign libtidy "tidyOptDiffThanDefault";
 
 /** Any settings different than snapshot?
 ** @param tdoc The tidy document to check.
 ** @result Returns a bool indicating whether or not a difference exists.
 */
-tidyOptDiffThanSnapshot :: (tdoc: TidyDoc) -> Bool #foreign libtidy;
+optDiffThanSnapshot :: (tdoc: TidyDoc) -> Bool #foreign libtidy "tidyOptDiffThanSnapshot";
 
 /** Copy current configuration settings from one document to another. Note
 ** that the destination document's existing settings will be stored as that
@@ -1739,20 +1739,20 @@ tidyOptDiffThanSnapshot :: (tdoc: TidyDoc) -> Bool #foreign libtidy;
 ** source document's settings.
 ** @result Returns a bool indicating success or failure.
 */
-tidyOptCopyConfig :: (tdocTo: TidyDoc, tdocFrom: TidyDoc) -> Bool #foreign libtidy;
+optCopyConfig :: (tdocTo: TidyDoc, tdocFrom: TidyDoc) -> Bool #foreign libtidy "tidyOptCopyConfig";
 
 /** Get character encoding name. Used with @ref TidyCharEncoding,
 ** @ref TidyOutCharEncoding, and @ref TidyInCharEncoding.
 ** @result The encoding name as a string for the specified option.
 */
-tidyOptGetEncName :: (tdoc: TidyDoc, optId: TidyOptionId) -> ctmbstr #foreign libtidy;
+optGetEncName :: (tdoc: TidyDoc, optId: TidyOptionId) -> ctmbstr #foreign libtidy "tidyOptGetEncName";
 
 /** Get the current pick list value for the option ID, which can be useful for
 ** enum types.
 ** @result Returns a string indicating the current value of the specified
 **         option.
 */
-tidyOptGetCurrPick :: (tdoc: TidyDoc, optId: TidyOptionId) -> ctmbstr #foreign libtidy;
+optGetCurrPick :: (tdoc: TidyDoc, optId: TidyOptionId) -> ctmbstr #foreign libtidy "tidyOptGetCurrPick";
 
 /** Initiates an iterator for a list of user-declared tags, including autonomous
 ** custom tags detected in the document if @ref TidyUseCustomTags is not set to
@@ -1770,7 +1770,7 @@ tidyOptGetCurrPick :: (tdoc: TidyDoc, optId: TidyOptionId) -> ctmbstr #foreign l
 ** @result Returns a TidyIterator, which is a token used to represent the
 **         current position in a list within LibTidy.
 */
-tidyOptGetDeclTagList :: (tdoc: TidyDoc) -> TidyIterator #foreign libtidy;
+optGetDeclTagList :: (tdoc: TidyDoc) -> TidyIterator #foreign libtidy "tidyOptGetDeclTagList";
 
 /** Given a valid TidyIterator initiated with tidyOptGetDeclTagList(), returns a
 ** string representing a user-declared or autonomous custom tag.
@@ -1781,7 +1781,7 @@ tidyOptGetDeclTagList :: (tdoc: TidyDoc) -> TidyIterator #foreign libtidy;
 **         @ref TidyUseCustomTags.
 ** @result A string containing the next tag.
 */
-tidyOptGetNextDeclTag :: (tdoc: TidyDoc, optId: TidyOptionId, iter: *TidyIterator) -> ctmbstr #foreign libtidy;
+optGetNextDeclTag :: (tdoc: TidyDoc, optId: TidyOptionId, iter: *TidyIterator) -> ctmbstr #foreign libtidy "tidyOptGetNextDeclTag";
 
 /** Initiates an iterator for a list of priority attributes. This iterator
 ** allows you to iterate through all of the priority attributes defined with
@@ -1799,13 +1799,13 @@ tidyOptGetNextDeclTag :: (tdoc: TidyDoc, optId: TidyOptionId, iter: *TidyIterato
 ** @result Returns a TidyIterator, which is a token used to represent the
 **         current position in a list within LibTidy.
 */
-tidyOptGetPriorityAttrList :: (tdoc: TidyDoc) -> TidyIterator #foreign libtidy;
+optGetPriorityAttrList :: (tdoc: TidyDoc) -> TidyIterator #foreign libtidy "tidyOptGetPriorityAttrList";
 
 /** Given a valid TidyIterator initiated with tidyOptGetPriorityAttrList(),
 ** returns a string representing a priority attribute.
 ** @result A string containing the next tag.
 */
-tidyOptGetNextPriorityAttr :: (tdoc: TidyDoc, iter: *TidyIterator) -> ctmbstr #foreign libtidy;
+optGetNextPriorityAttr :: (tdoc: TidyDoc, iter: *TidyIterator) -> ctmbstr #foreign libtidy "tidyOptGetNextPriorityAttr";
 
 /** Initiates an iterator for a list of muted messages. This iterator allows
 ** you to iterate through all of the priority attributes defined with the
@@ -1823,24 +1823,24 @@ tidyOptGetNextPriorityAttr :: (tdoc: TidyDoc, iter: *TidyIterator) -> ctmbstr #f
 ** @result Returns a TidyIterator, which is a token used to represent the
 **         current position in a list within LibTidy.
 */
-tidyOptGetMutedMessageList :: (tdoc: TidyDoc) -> TidyIterator #foreign libtidy;
+optGetMutedMessageList :: (tdoc: TidyDoc) -> TidyIterator #foreign libtidy "tidyOptGetMutedMessageList";
 
 /** Given a valid TidyIterator initiated with tidyOptGetMutedMessageList(),
 ** returns a string representing a muted message.
 ** @result A string containing the next tag.
 */
-tidyOptGetNextMutedMessage :: (tdoc: TidyDoc, iter: *TidyIterator) -> ctmbstr #foreign libtidy;
+optGetNextMutedMessage :: (tdoc: TidyDoc, iter: *TidyIterator) -> ctmbstr #foreign libtidy "tidyOptGetNextMutedMessage";
 
 /** Get the description of the specified option.
 ** @result Returns a string containing a description of the given option.
 */
-tidyOptGetDoc :: (tdoc: TidyDoc, opt: TidyOption) -> ctmbstr #foreign libtidy;
+optGetDoc :: (tdoc: TidyDoc, opt: TidyOption) -> ctmbstr #foreign libtidy "tidyOptGetDoc";
 
 /** Given a valid TidyIterator initiated with tidyOptGetDocLinksList(), returns
 ** a TidyOption instance.
 ** @result Returns in instance of TidyOption.
 */
-tidyOptGetNextDocLinks :: (tdoc: TidyDoc, pos: *TidyIterator) -> TidyOption #foreign libtidy;
+optGetNextDocLinks :: (tdoc: TidyDoc, pos: *TidyIterator) -> TidyOption #foreign libtidy "tidyOptGetNextDocLinks";
 
 TidyBuffer :: _TidyBuffer;
 
@@ -1872,22 +1872,22 @@ TidyInputSource :: _TidyInputSource;
 ** bindings.
 ** @result Returns a bool indicating success or failure.
 */
-tidyInitSource :: (source: *TidyInputSource, srcData: *void, gbFunc: TidyGetByteFunc, ugbFunc: TidyUngetByteFunc, endFunc: TidyEOFFunc) -> Bool #foreign libtidy;
+initSource :: (source: *TidyInputSource, srcData: *void, gbFunc: TidyGetByteFunc, ugbFunc: TidyUngetByteFunc, endFunc: TidyEOFFunc) -> Bool #foreign libtidy "tidyInitSource";
 
 /** Helper: get next byte from input source.
 ** @param source A pointer to your input source.
 ** @result Returns a byte as an unsigned integer.
 */
-tidyGetByte :: (source: *TidyInputSource) -> u32 #foreign libtidy;
+getByte :: (source: *TidyInputSource) -> u32 #foreign libtidy "tidyGetByte";
 
 /** Helper: unget byte back to input source. */
-tidyUngetByte :: (source: *TidyInputSource, byteValue: u32) -> void #foreign libtidy;
+ungetByte :: (source: *TidyInputSource, byteValue: u32) -> void #foreign libtidy "tidyUngetByte";
 
 /** Helper: check if input source at end.
 ** @param source The input source.
 ** @result Returns a bool indicating whether or not the source is at EOF.
 */
-tidyIsEOF :: (source: *TidyInputSource) -> Bool #foreign libtidy;
+isEOF :: (source: *TidyInputSource) -> Bool #foreign libtidy "tidyIsEOF";
 
 /** Output callback: send a byte to output */
 TidyPutByteFunc :: #type (sinkData: *void, bt: byte) -> void #c_call;
@@ -1911,16 +1911,16 @@ TidyOutputSink :: _TidyOutputSink;
 ** bindings.
 ** @result Returns a bool indicating success or failure.
 */
-tidyInitSink :: (sink: *TidyOutputSink, snkData: *void, pbFunc: TidyPutByteFunc) -> Bool #foreign libtidy;
+initSink :: (sink: *TidyOutputSink, snkData: *void, pbFunc: TidyPutByteFunc) -> Bool #foreign libtidy "tidyInitSink";
 
 /** Helper: send a byte to output. */
-tidyPutByte :: (sink: *TidyOutputSink, byteValue: u32) -> void #foreign libtidy;
+putByte :: (sink: *TidyOutputSink, byteValue: u32) -> void #foreign libtidy "tidyPutByte";
 
 /** Set the file path to use for reports when `TidyEmacs` is being used. This
 ** function provides a proper interface for using the hidden, internal-only
 ** `TidyEmacsFile` configuration option.
 */
-tidySetEmacsFile :: (tdoc: TidyDoc, filePath: ctmbstr) -> void #foreign libtidy;
+setEmacsFile :: (tdoc: TidyDoc, filePath: ctmbstr) -> void #foreign libtidy "tidySetEmacsFile";
 
 /** Get the file path to use for reports when `TidyEmacs` is being used. This
 ** function provides a proper interface for using the hidden, internal-only
@@ -1928,22 +1928,22 @@ tidySetEmacsFile :: (tdoc: TidyDoc, filePath: ctmbstr) -> void #foreign libtidy;
 ** @param tdoc The tidy document for which you want to fetch the file path.
 ** @result Returns a string indicating the file path.
 */
-tidyGetEmacsFile :: (tdoc: TidyDoc) -> ctmbstr #foreign libtidy;
+getEmacsFile :: (tdoc: TidyDoc) -> ctmbstr #foreign libtidy "tidyGetEmacsFile";
 
 /** Set error sink to named file.
 ** @result Returns a file handle.
 */
-tidySetErrorFile :: (tdoc: TidyDoc, errfilnam: ctmbstr) -> *FILE #foreign libtidy;
+setErrorFile :: (tdoc: TidyDoc, errfilnam: ctmbstr) -> *FILE #foreign libtidy "tidySetErrorFile";
 
 /** Set error sink to given buffer.
 ** @result Returns 0 upon success or a standard error number.
 */
-tidySetErrorBuffer :: (tdoc: TidyDoc, errbuf: *TidyBuffer) -> s32 #foreign libtidy;
+setErrorBuffer :: (tdoc: TidyDoc, errbuf: *TidyBuffer) -> s32 #foreign libtidy "tidySetErrorBuffer";
 
 /** Set error sink to given generic sink.
 ** @result Returns 0 upon success or a standard error number.
 */
-tidySetErrorSink :: (tdoc: TidyDoc, sink: *TidyOutputSink) -> s32 #foreign libtidy;
+setErrorSink :: (tdoc: TidyDoc, sink: *TidyOutputSink) -> s32 #foreign libtidy "tidySetErrorSink";
 
 /** This typedef represents the required signature for your provided callback
 ** function should you wish to register one with tidySetReportFilter().
@@ -1959,7 +1959,7 @@ tidySetErrorSink :: (tdoc: TidyDoc, sink: *TidyOutputSink) -> s32 #foreign libti
 TidyReportFilter :: #type (tdoc: TidyDoc, lvl: TidyReportLevel, line: u32, col: u32, mssg: ctmbstr) -> Bool #c_call;
 
 /** This function informs Tidy to use the specified callback to send reports. */
-tidySetReportFilter :: (tdoc: TidyDoc, filtCallback: TidyReportFilter) -> Bool #foreign libtidy;
+setReportFilter :: (tdoc: TidyDoc, filtCallback: TidyReportFilter) -> Bool #foreign libtidy "tidySetReportFilter";
 
 /** This typedef represents the required signature for your provided callback
 ** function should you wish to register one with tidySetMessageCallback().
@@ -1972,13 +1972,13 @@ tidySetReportFilter :: (tdoc: TidyDoc, filtCallback: TidyReportFilter) -> Bool #
 TidyMessageCallback :: #type (tmessage: TidyMessage) -> Bool #c_call;
 
 /** This function informs Tidy to use the specified callback to send reports. */
-tidySetMessageCallback :: (tdoc: TidyDoc, filtCallback: TidyMessageCallback) -> Bool #foreign libtidy;
+setMessageCallback :: (tdoc: TidyDoc, filtCallback: TidyMessageCallback) -> Bool #foreign libtidy "tidySetMessageCallback";
 
 /** Get the tidy document this message comes from.
 ** @param tmessage Specify the message that you are querying.
 ** @result Returns the TidyDoc that generated the message.
 */
-tidyGetMessageDoc :: (tmessage: TidyMessage) -> TidyDoc #foreign libtidy;
+getMessageDoc :: (tmessage: TidyMessage) -> TidyDoc #foreign libtidy "tidyGetMessageDoc";
 
 /** Get the message code.
 ** @param tmessage Specify the message that you are querying.
@@ -1988,7 +1988,7 @@ tidyGetMessageDoc :: (tmessage: TidyMessage) -> TidyDoc #foreign libtidy;
 **         don't store this value in your own application. Instead use the
 **         enum field or use the message key string value.
 */
-tidyGetMessageCode :: (tmessage: TidyMessage) -> u32 #foreign libtidy;
+getMessageCode :: (tmessage: TidyMessage) -> u32 #foreign libtidy "tidyGetMessageCode";
 
 /** Get the message key string.
 ** @param tmessage Specify the message that you are querying.
@@ -1996,26 +1996,26 @@ tidyGetMessageCode :: (tmessage: TidyMessage) -> u32 #foreign libtidy;
 **         to be stable by the LibTidy API, and is suitable for use as a key
 **         in your own applications.
 */
-tidyGetMessageKey :: (tmessage: TidyMessage) -> ctmbstr #foreign libtidy;
+getMessageKey :: (tmessage: TidyMessage) -> ctmbstr #foreign libtidy "tidyGetMessageKey";
 
 /** Get the line number the message applies to.
 ** @param tmessage Specify the message that you are querying.
 ** @result Returns the line number, if any, that generated the message.
 */
-tidyGetMessageLine :: (tmessage: TidyMessage) -> s32 #foreign libtidy;
+getMessageLine :: (tmessage: TidyMessage) -> s32 #foreign libtidy "tidyGetMessageLine";
 
 /** Get the column the message applies to.
 ** @param tmessage Specify the message that you are querying.
 ** @result Returns the column number, if any, that generated the message.
 */
-tidyGetMessageColumn :: (tmessage: TidyMessage) -> s32 #foreign libtidy;
+getMessageColumn :: (tmessage: TidyMessage) -> s32 #foreign libtidy "tidyGetMessageColumn";
 
 /** Get the TidyReportLevel of the message.
 ** @param tmessage Specify the message that you are querying.
 ** @result Returns a TidyReportLevel indicating the severity or status of the
 **         message.
 */
-tidyGetMessageLevel :: (tmessage: TidyMessage) -> TidyReportLevel #foreign libtidy;
+getMessageLevel :: (tmessage: TidyMessage) -> TidyReportLevel #foreign libtidy "tidyGetMessageLevel";
 
 /** Get the muted status of the message, that is, whether or not the
 ** current configuration indicated that this message should be muted.
@@ -2023,77 +2023,77 @@ tidyGetMessageLevel :: (tmessage: TidyMessage) -> TidyReportLevel #foreign libti
 ** @result Returns a Bool indicating that the config indicates muting this
 **         message.
 */
-tidyGetMessageIsMuted :: (tmessage: TidyMessage) -> Bool #foreign libtidy;
+getMessageIsMuted :: (tmessage: TidyMessage) -> Bool #foreign libtidy "tidyGetMessageIsMuted";
 
 /** Get the default format string, which is the format string for the message
 ** in Tidy's default localization (en_us).
 ** @param tmessage Specify the message that you are querying.
 ** @result Returns the default localization format string of the message.
 */
-tidyGetMessageFormatDefault :: (tmessage: TidyMessage) -> ctmbstr #foreign libtidy;
+getMessageFormatDefault :: (tmessage: TidyMessage) -> ctmbstr #foreign libtidy "tidyGetMessageFormatDefault";
 
 /** Get the localized format string. If a localized version of the format string
 ** doesn't exist, then the default version will be returned.
 ** @param tmessage Specify the message that you are querying.
 ** @result Returns the localized format string of the message.
 */
-tidyGetMessageFormat :: (tmessage: TidyMessage) -> ctmbstr #foreign libtidy;
+getMessageFormat :: (tmessage: TidyMessage) -> ctmbstr #foreign libtidy "tidyGetMessageFormat";
 
 /** Get the message with the format string already completed, in Tidy's
 ** default localization.
 ** @param tmessage Specify the message that you are querying.
 ** @result Returns the message in the default localization.
 */
-tidyGetMessageDefault :: (tmessage: TidyMessage) -> ctmbstr #foreign libtidy;
+getMessageDefault :: (tmessage: TidyMessage) -> ctmbstr #foreign libtidy "tidyGetMessageDefault";
 
 /** Get the message with the format string already completed, in Tidy's
 ** current localization.
 ** @param tmessage Specify the message that you are querying.
 ** @result Returns the message in the current localization.
 */
-tidyGetMessage :: (tmessage: TidyMessage) -> ctmbstr #foreign libtidy;
+getMessage :: (tmessage: TidyMessage) -> ctmbstr #foreign libtidy "tidyGetMessage";
 
 /** Get the position part part of the message in the default language.
 ** @param tmessage Specify the message that you are querying.
 ** @result Returns the positional part of a string as Tidy would display it
 **         in the console application.
 */
-tidyGetMessagePosDefault :: (tmessage: TidyMessage) -> ctmbstr #foreign libtidy;
+getMessagePosDefault :: (tmessage: TidyMessage) -> ctmbstr #foreign libtidy "tidyGetMessagePosDefault";
 
 /** Get the position part part of the message in the current language.
 ** @param tmessage Specify the message that you are querying.
 ** @result Returns the positional part of a string as Tidy would display it
 **         in the console application.
 */
-tidyGetMessagePos :: (tmessage: TidyMessage) -> ctmbstr #foreign libtidy;
+getMessagePos :: (tmessage: TidyMessage) -> ctmbstr #foreign libtidy "tidyGetMessagePos";
 
 /** Get the prefix part of a message in the default language.
 ** @param tmessage Specify the message that you are querying.
 ** @result Returns the message prefix part of a string as Tidy would display
 **         it in the console application.
 */
-tidyGetMessagePrefixDefault :: (tmessage: TidyMessage) -> ctmbstr #foreign libtidy;
+getMessagePrefixDefault :: (tmessage: TidyMessage) -> ctmbstr #foreign libtidy "tidyGetMessagePrefixDefault";
 
 /** Get the prefix part of a message in the current language.
 ** @param tmessage Specify the message that you are querying.
 ** @result Returns the message prefix part of a string as Tidy would display
 **         it in the console application.
 */
-tidyGetMessagePrefix :: (tmessage: TidyMessage) -> ctmbstr #foreign libtidy;
+getMessagePrefix :: (tmessage: TidyMessage) -> ctmbstr #foreign libtidy "tidyGetMessagePrefix";
 
 /** Get the complete message as Tidy would emit it in the default localization.
 ** @param tmessage Specify the message that you are querying.
 ** @result Returns the complete message just as Tidy would display it on the
 **         console.
 */
-tidyGetMessageOutputDefault :: (tmessage: TidyMessage) -> ctmbstr #foreign libtidy;
+getMessageOutputDefault :: (tmessage: TidyMessage) -> ctmbstr #foreign libtidy "tidyGetMessageOutputDefault";
 
 /** Get the complete message as Tidy would emit it in the current localization.
 ** @param tmessage Specify the message that you are querying.
 ** @result Returns the complete message just as Tidy would display it on the
 **         console.
 */
-tidyGetMessageOutput :: (tmessage: TidyMessage) -> ctmbstr #foreign libtidy;
+getMessageOutput :: (tmessage: TidyMessage) -> ctmbstr #foreign libtidy "tidyGetMessageOutput";
 
 /** Initiates an iterator for a list of arguments related to a given message.
 ** This iterator allows you to iterate through all of the arguments, if any.
@@ -2111,7 +2111,7 @@ tidyGetMessageOutput :: (tmessage: TidyMessage) -> ctmbstr #foreign libtidy;
 ** @result Returns a TidyIterator, which is a token used to represent the
 **         current position in a list within LibTidy.
 */
-tidyGetMessageArguments :: (tmessage: TidyMessage) -> TidyIterator #foreign libtidy;
+getMessageArguments :: (tmessage: TidyMessage) -> TidyIterator #foreign libtidy "tidyGetMessageArguments";
 
 /** Given a valid TidyIterator initiated with tidyGetMessageArguments(), returns
 ** an instance of the opaque type TidyMessageArgument, which serves as a token
@@ -2119,44 +2119,44 @@ tidyGetMessageArguments :: (tmessage: TidyMessage) -> TidyIterator #foreign libt
 ** information.
 ** @result Returns an instance of TidyMessageArgument.
 */
-tidyGetNextMessageArgument :: (tmessage: TidyMessage, iter: *TidyIterator) -> TidyMessageArgument #foreign libtidy;
+getNextMessageArgument :: (tmessage: TidyMessage, iter: *TidyIterator) -> TidyMessageArgument #foreign libtidy "tidyGetNextMessageArgument";
 
 /** Returns the `TidyFormatParameterType` of the given message argument.
 ** @result Returns the type of parameter of type TidyFormatParameterType.
 */
-tidyGetArgType :: (tmessage: TidyMessage, arg: *TidyMessageArgument) -> TidyFormatParameterType #foreign libtidy;
+getArgType :: (tmessage: TidyMessage, arg: *TidyMessageArgument) -> TidyFormatParameterType #foreign libtidy "tidyGetArgType";
 
 /** Returns the format specifier of the given message argument. The memory for
 ** this string is cleared upon termination of the callback, so do be sure to
 ** make your own copy.
 ** @result Returns the format specifier string of the given argument.
 */
-tidyGetArgFormat :: (tmessage: TidyMessage, arg: *TidyMessageArgument) -> ctmbstr #foreign libtidy;
+getArgFormat :: (tmessage: TidyMessage, arg: *TidyMessageArgument) -> ctmbstr #foreign libtidy "tidyGetArgFormat";
 
 /** Returns the string value of the given message argument. An assertion
 ** will be generated if the argument type is not a string.
 ** @result Returns the string value of the given argument.
 */
-tidyGetArgValueString :: (tmessage: TidyMessage, arg: *TidyMessageArgument) -> ctmbstr #foreign libtidy;
+getArgValueString :: (tmessage: TidyMessage, arg: *TidyMessageArgument) -> ctmbstr #foreign libtidy "tidyGetArgValueString";
 
 /** Returns the unsigned integer value of the given message argument. An
 ** assertion will be generated if the argument type is not an unsigned int.
 ** @result Returns the unsigned integer value of the given argument.
 */
-tidyGetArgValueUInt :: (tmessage: TidyMessage, arg: *TidyMessageArgument) -> u32 #foreign libtidy;
+getArgValueUInt :: (tmessage: TidyMessage, arg: *TidyMessageArgument) -> u32 #foreign libtidy "tidyGetArgValueUInt";
 
 /** Returns the integer value of the given message argument. An assertion
 ** will be generated if the argument type is not an integer.
 ** @result Returns the integer value of the given argument.
 */
-tidyGetArgValueInt :: (tmessage: TidyMessage, arg: *TidyMessageArgument) -> s32 #foreign libtidy;
+getArgValueInt :: (tmessage: TidyMessage, arg: *TidyMessageArgument) -> s32 #foreign libtidy "tidyGetArgValueInt";
 
 /**
 *  Returns the double value of the given message argument. An assertion
 *  will be generated if the argument type is not a double.
 ** @result Returns the double value of the given argument.
 */
-tidyGetArgValueDouble :: (tmessage: TidyMessage, arg: *TidyMessageArgument) -> float64 #foreign libtidy;
+getArgValueDouble :: (tmessage: TidyMessage, arg: *TidyMessageArgument) -> float64 #foreign libtidy "tidyGetArgValueDouble";
 
 /** This typedef represents the required signature for your provided callback
 ** function should you wish to register one with tidySetMessageCallback().
@@ -2171,14 +2171,14 @@ TidyPPProgress :: #type (tdoc: TidyDoc, line: u32, col: u32, destLine: u32) -> v
 /** This function informs Tidy to use the specified callback for tracking the
 ** pretty-printing process progress.
 */
-tidySetPrettyPrinterCallback :: (tdoc: TidyDoc, callback: TidyPPProgress) -> Bool #foreign libtidy;
+setPrettyPrinterCallback :: (tdoc: TidyDoc, callback: TidyPPProgress) -> Bool #foreign libtidy "tidySetPrettyPrinterCallback";
 
 /** Parse markup in named file.
 ** @result Returns the highest of `2` indicating that errors were present in
 **         the document, `1` indicating warnings, and `0` in the case of
 **         everything being okay.
 */
-tidyParseFile :: (tdoc: TidyDoc, filename: ctmbstr) -> s32 #foreign libtidy;
+parseFile :: (tdoc: TidyDoc, filename: ctmbstr) -> s32 #foreign libtidy "tidyParseFile";
 
 /** Parse markup from the standard input.
 ** @param tdoc The tidy document to use for parsing.
@@ -2186,7 +2186,7 @@ tidyParseFile :: (tdoc: TidyDoc, filename: ctmbstr) -> s32 #foreign libtidy;
 **         the document, `1` indicating warnings, and `0` in the case of
 **         everything being okay.
 */
-tidyParseStdin :: (tdoc: TidyDoc) -> s32 #foreign libtidy;
+parseStdin :: (tdoc: TidyDoc) -> s32 #foreign libtidy "tidyParseStdin";
 
 /** Parse markup in given string. Note that the supplied string is of type
 ** `ctmbstr` based on `char` and therefore doesn't support the use of
@@ -2195,56 +2195,56 @@ tidyParseStdin :: (tdoc: TidyDoc) -> s32 #foreign libtidy;
 **         the document, `1` indicating warnings, and `0` in the case of
 **         everything being okay.
 */
-tidyParseString :: (tdoc: TidyDoc, content: ctmbstr) -> s32 #foreign libtidy;
+parseString :: (tdoc: TidyDoc, content: ctmbstr) -> s32 #foreign libtidy "tidyParseString";
 
 /** Parse markup in given buffer.
 ** @result Returns the highest of `2` indicating that errors were present in
 **         the document, `1` indicating warnings, and `0` in the case of
 **         everything being okay.
 */
-tidyParseBuffer :: (tdoc: TidyDoc, buf: *TidyBuffer) -> s32 #foreign libtidy;
+parseBuffer :: (tdoc: TidyDoc, buf: *TidyBuffer) -> s32 #foreign libtidy "tidyParseBuffer";
 
 /** Parse markup in given generic input source.
 ** @result Returns the highest of `2` indicating that errors were present in
 **         the document, `1` indicating warnings, and `0` in the case of
 **         everything being okay.
 */
-tidyParseSource :: (tdoc: TidyDoc, source: *TidyInputSource) -> s32 #foreign libtidy;
+parseSource :: (tdoc: TidyDoc, source: *TidyInputSource) -> s32 #foreign libtidy "tidyParseSource";
 
 /** Execute configured cleanup and repair operations on parsed markup.
 ** @param tdoc The tidy document to use.
 ** @result An integer representing the status.
 */
-tidyCleanAndRepair :: (tdoc: TidyDoc) -> s32 #foreign libtidy;
+cleanAndRepair :: (tdoc: TidyDoc) -> s32 #foreign libtidy "tidyCleanAndRepair";
 
 /** Reports the document type and diagnostic statistics on parsed and repaired
 ** markup. You must call tidyCleanAndRepair() before using this function.
 ** @param tdoc The tidy document to use.
 ** @result An integer representing the status.
 */
-tidyRunDiagnostics :: (tdoc: TidyDoc) -> s32 #foreign libtidy;
+runDiagnostics :: (tdoc: TidyDoc) -> s32 #foreign libtidy "tidyRunDiagnostics";
 
 /** Reports the document type into the output sink.
 ** @param tdoc The tidy document to use.
 ** @result An integer representing the status.
 */
-tidyReportDoctype :: (tdoc: TidyDoc) -> s32 #foreign libtidy;
+reportDoctype :: (tdoc: TidyDoc) -> s32 #foreign libtidy "tidyReportDoctype";
 
 /** Save the tidy document to the named file.
 ** @result An integer representing the status.
 */
-tidySaveFile :: (tdoc: TidyDoc, filename: ctmbstr) -> s32 #foreign libtidy;
+saveFile :: (tdoc: TidyDoc, filename: ctmbstr) -> s32 #foreign libtidy "tidySaveFile";
 
 /** Save the tidy document to standard output (FILE*).
 ** @param tdoc The tidy document to save.
 ** @result An integer representing the status.
 */
-tidySaveStdout :: (tdoc: TidyDoc) -> s32 #foreign libtidy;
+saveStdout :: (tdoc: TidyDoc) -> s32 #foreign libtidy "tidySaveStdout";
 
 /** Save the tidy document to given TidyBuffer object.
 ** @result An integer representing the status.
 */
-tidySaveBuffer :: (tdoc: TidyDoc, buf: *TidyBuffer) -> s32 #foreign libtidy;
+saveBuffer :: (tdoc: TidyDoc, buf: *TidyBuffer) -> s32 #foreign libtidy "tidySaveBuffer";
 
 /** Save the tidy document to an application buffer. If TidyShowMarkup and the
 ** document has no errors, or TidyForceOutput, then the current document (per
@@ -2254,192 +2254,192 @@ tidySaveBuffer :: (tdoc: TidyDoc, buf: *TidyBuffer) -> s32 #foreign libtidy;
 ** enough, ENOMEM will be returned, else the actual document status.
 ** @result An integer representing the status.
 */
-tidySaveString :: (tdoc: TidyDoc, buffer: tmbstr, buflen: *u32) -> s32 #foreign libtidy;
+saveString :: (tdoc: TidyDoc, buffer: tmbstr, buflen: *u32) -> s32 #foreign libtidy "tidySaveString";
 
 /** Save to given generic output sink.
 ** @result An integer representing the status.
 */
-tidySaveSink :: (tdoc: TidyDoc, sink: *TidyOutputSink) -> s32 #foreign libtidy;
+saveSink :: (tdoc: TidyDoc, sink: *TidyOutputSink) -> s32 #foreign libtidy "tidySaveSink";
 
 /** Save current settings to named file. Only writes non-default values.
 ** @result An integer representing the status.
 */
-tidyOptSaveFile :: (tdoc: TidyDoc, cfgfil: ctmbstr) -> s32 #foreign libtidy;
+optSaveFile :: (tdoc: TidyDoc, cfgfil: ctmbstr) -> s32 #foreign libtidy "tidyOptSaveFile";
 
 /** Save current settings to given output sink. Only non-default values are
 ** written.
 ** @result An integer representing the status.
 */
-tidyOptSaveSink :: (tdoc: TidyDoc, sink: *TidyOutputSink) -> s32 #foreign libtidy;
+optSaveSink :: (tdoc: TidyDoc, sink: *TidyOutputSink) -> s32 #foreign libtidy "tidyOptSaveSink";
 
 /** Get the root node.
 ** @param tdoc The document to query.
 ** @result Returns a tidy node.
 */
-tidyGetRoot :: (tdoc: TidyDoc) -> TidyNode #foreign libtidy;
+getRoot :: (tdoc: TidyDoc) -> TidyNode #foreign libtidy "tidyGetRoot";
 
 /** Get the HTML node.
 ** @param tdoc The document to query.
 ** @result Returns a tidy node.
 */
-tidyGetHtml :: (tdoc: TidyDoc) -> TidyNode #foreign libtidy;
+getHtml :: (tdoc: TidyDoc) -> TidyNode #foreign libtidy "tidyGetHtml";
 
 /** Get the HEAD node.
 ** @param tdoc The document to query.
 ** @result Returns a tidy node.
 */
-tidyGetHead :: (tdoc: TidyDoc) -> TidyNode #foreign libtidy;
+getHead :: (tdoc: TidyDoc) -> TidyNode #foreign libtidy "tidyGetHead";
 
 /** Get the BODY node.
 ** @param tdoc The document to query.
 ** @result Returns a tidy node.
 */
-tidyGetBody :: (tdoc: TidyDoc) -> TidyNode #foreign libtidy;
+getBody :: (tdoc: TidyDoc) -> TidyNode #foreign libtidy "tidyGetBody";
 
 /** Get the parent of the indicated node.
 ** @param tnod The node to query.
 ** @result Returns a tidy node.
 */
-tidyGetParent :: (tnod: TidyNode) -> TidyNode #foreign libtidy;
+getParent :: (tnod: TidyNode) -> TidyNode #foreign libtidy "tidyGetParent";
 
 /** Get the child of the indicated node.
 ** @param tnod The node to query.
 ** @result Returns a tidy node.
 */
-tidyGetChild :: (tnod: TidyNode) -> TidyNode #foreign libtidy;
+getChild :: (tnod: TidyNode) -> TidyNode #foreign libtidy "tidyGetChild";
 
 /** Get the next sibling node.
 ** @param tnod The node to query.
 ** @result Returns a tidy node.
 */
-tidyGetNext :: (tnod: TidyNode) -> TidyNode #foreign libtidy;
+getNext :: (tnod: TidyNode) -> TidyNode #foreign libtidy "tidyGetNext";
 
 /** Get the previous sibling node.
 ** @param tnod The node to query.
 ** @result Returns a tidy node.
 */
-tidyGetPrev :: (tnod: TidyNode) -> TidyNode #foreign libtidy;
+getPrev :: (tnod: TidyNode) -> TidyNode #foreign libtidy "tidyGetPrev";
 
 /** Remove the indicated node.
 ** @result Returns the next tidy node.
 */
-tidyDiscardElement :: (tdoc: TidyDoc, tnod: TidyNode) -> TidyNode #foreign libtidy;
+discardElement :: (tdoc: TidyDoc, tnod: TidyNode) -> TidyNode #foreign libtidy "tidyDiscardElement";
 
 /** Get the first attribute.
 ** @param tnod The node for which to get attributes.
 ** @result Returns an instance of TidyAttr.
 */
-tidyAttrFirst :: (tnod: TidyNode) -> TidyAttr #foreign libtidy;
+attrFirst :: (tnod: TidyNode) -> TidyAttr #foreign libtidy "tidyAttrFirst";
 
 /** Get the next attribute.
 ** @param tattr The current attribute, so the next one can be returned.
 ** @result Returns and instance of TidyAttr.
 */
-tidyAttrNext :: (tattr: TidyAttr) -> TidyAttr #foreign libtidy;
+attrNext :: (tattr: TidyAttr) -> TidyAttr #foreign libtidy "tidyAttrNext";
 
 /** Get the name of a TidyAttr instance.
 ** @param tattr The tidy attribute to query.
 ** @result Returns a string indicating the name of the attribute.
 */
-tidyAttrName :: (tattr: TidyAttr) -> ctmbstr #foreign libtidy;
+attrName :: (tattr: TidyAttr) -> ctmbstr #foreign libtidy "tidyAttrName";
 
 /** Get the value of a TidyAttr instance.
 ** @param tattr The tidy attribute to query.
 ** @result Returns a string indicating the value of the attribute.
 */
-tidyAttrValue :: (tattr: TidyAttr) -> ctmbstr #foreign libtidy;
+attrValue :: (tattr: TidyAttr) -> ctmbstr #foreign libtidy "tidyAttrValue";
 
 /** Discard an attribute. */
-tidyAttrDiscard :: (itdoc: TidyDoc, tnod: TidyNode, tattr: TidyAttr) -> void #foreign libtidy;
+attrDiscard :: (itdoc: TidyDoc, tnod: TidyNode, tattr: TidyAttr) -> void #foreign libtidy "tidyAttrDiscard";
 
 /** Get the attribute ID given a tidy attribute.
 ** @param tattr The attribute to query.
 ** @result Returns the TidyAttrId of the given attribute.
 **/
-tidyAttrGetId :: (tattr: TidyAttr) -> TidyAttrId #foreign libtidy;
+attrGetId :: (tattr: TidyAttr) -> TidyAttrId #foreign libtidy "tidyAttrGetId";
 
 /** Indicates whether or not a given attribute is an event attribute.
 ** @param tattr The attribute to query.
 ** @result Returns a bool indicating whether or not the attribute is an event.
 **/
-tidyAttrIsEvent :: (tattr: TidyAttr) -> Bool #foreign libtidy;
+attrIsEvent :: (tattr: TidyAttr) -> Bool #foreign libtidy "tidyAttrIsEvent";
 
 /** Get an instance of TidyAttr by specifying an attribute ID.
 ** @result Returns a TidyAttr instance.
 */
-tidyAttrGetById :: (tnod: TidyNode, attId: TidyAttrId) -> TidyAttr #foreign libtidy;
+attrGetById :: (tnod: TidyNode, attId: TidyAttrId) -> TidyAttr #foreign libtidy "tidyAttrGetById";
 
 /** Get the type of node.
 ** @param tnod The node to query.
 ** @result Returns the type of node as TidyNodeType.
 */
-tidyNodeGetType :: (tnod: TidyNode) -> TidyNodeType #foreign libtidy;
+nodeGetType :: (tnod: TidyNode) -> TidyNodeType #foreign libtidy "tidyNodeGetType";
 
 /** Get the name of the node.
 ** @param tnod The node to query.
 ** @result Returns a string indicating the name of the node.
 */
-tidyNodeGetName :: (tnod: TidyNode) -> ctmbstr #foreign libtidy;
+nodeGetName :: (tnod: TidyNode) -> ctmbstr #foreign libtidy "tidyNodeGetName";
 
 /** Indicates whether or not a node is a text node.
 ** @param tnod The node to query.
 ** @result Returns a bool indicating whether or not the node is a text node.
 */
-tidyNodeIsText :: (tnod: TidyNode) -> Bool #foreign libtidy;
+nodeIsText :: (tnod: TidyNode) -> Bool #foreign libtidy "tidyNodeIsText";
 
 /** Indicates whether or not the node is a propriety type.
 ** @result Returns a bool indicating whether or not the node is a proprietary type.
 */
-tidyNodeIsProp :: (tdoc: TidyDoc, tnod: TidyNode) -> Bool #foreign libtidy;
+nodeIsProp :: (tdoc: TidyDoc, tnod: TidyNode) -> Bool #foreign libtidy "tidyNodeIsProp";
 
 /** Indicates whether or not a node represents and HTML header element, such
 ** as h1, h2, etc.
 ** @param tnod The node to query.
 ** @result Returns a bool indicating whether or not the node is an HTML header.
 */
-tidyNodeIsHeader :: (tnod: TidyNode) -> Bool #foreign libtidy;
+nodeIsHeader :: (tnod: TidyNode) -> Bool #foreign libtidy "tidyNodeIsHeader";
 
 /** Indicates whether or not the node has text.
 ** @result Returns the type of node as TidyNodeType.
 */
-tidyNodeHasText :: (tdoc: TidyDoc, tnod: TidyNode) -> Bool #foreign libtidy;
+nodeHasText :: (tdoc: TidyDoc, tnod: TidyNode) -> Bool #foreign libtidy "tidyNodeHasText";
 
 /** Gets the text of a node and places it into the given TidyBuffer. The text will be terminated with a `TidyNewline`.
 ** If you want the raw utf-8 stream see `tidyNodeGetValue()`.
 ** @result Returns a bool indicating success or not.
 */
-tidyNodeGetText :: (tdoc: TidyDoc, tnod: TidyNode, buf: *TidyBuffer) -> Bool #foreign libtidy;
+nodeGetText :: (tdoc: TidyDoc, tnod: TidyNode, buf: *TidyBuffer) -> Bool #foreign libtidy "tidyNodeGetText";
 
 /** Get the value of the node. This copies the unescaped value of this node into
 ** the given TidyBuffer at UTF-8.
 ** @result Returns a bool indicating success or not.
 */
-tidyNodeGetValue :: (tdoc: TidyDoc, tnod: TidyNode, buf: *TidyBuffer) -> Bool #foreign libtidy;
+nodeGetValue :: (tdoc: TidyDoc, tnod: TidyNode, buf: *TidyBuffer) -> Bool #foreign libtidy "tidyNodeGetValue";
 
 /** Get the tag ID of the node.
 ** @param tnod The node to query.
 ** @result Returns the tag ID of the node as TidyTagId.
 */
-tidyNodeGetId :: (tnod: TidyNode) -> TidyTagId #foreign libtidy;
+nodeGetId :: (tnod: TidyNode) -> TidyTagId #foreign libtidy "tidyNodeGetId";
 
 /** Get the line number where the node occurs.
 ** @param tnod The node to query.
 ** @result Returns the line number.
 */
-tidyNodeLine :: (tnod: TidyNode) -> u32 #foreign libtidy;
+nodeLine :: (tnod: TidyNode) -> u32 #foreign libtidy "tidyNodeLine";
 
 /** Get the column location of the node.
 ** @param tnod The node to query.
 ** @result Returns the column location of the node.
 */
-tidyNodeColumn :: (tnod: TidyNode) -> u32 #foreign libtidy;
+nodeColumn :: (tnod: TidyNode) -> u32 #foreign libtidy "tidyNodeColumn";
 
 /**
 ** Given a message code, return the text key that represents it.
 ** @param code The error code to lookup.
 ** @result The string representing the error code.
 */
-tidyErrorCodeAsKey :: (code: u32) -> ctmbstr #foreign libtidy;
+errorCodeAsKey :: (code: u32) -> ctmbstr #foreign libtidy "tidyErrorCodeAsKey";
 
 /**
 ** Given a text key representing a message code, return the uint that
@@ -2454,7 +2454,7 @@ tidyErrorCodeAsKey :: (code: u32) -> ctmbstr #foreign libtidy;
 **         used to lookup Tidy's built-in strings. If the provided string does
 **         not have a matching message code, then UINT_MAX will be returned.
 */
-tidyErrorCodeFromKey :: (code: ctmbstr) -> u32 #foreign libtidy;
+errorCodeFromKey :: (code: ctmbstr) -> u32 #foreign libtidy "tidyErrorCodeFromKey";
 
 /** Initiates an iterator for a list of message codes available in Tidy.
 ** This iterator allows you to iterate through all of the code. In orde to
@@ -2492,12 +2492,12 @@ getNextErrorCode :: (iter: *TidyIterator) -> u32 #foreign libtidy;
 **         true. However the opposite is not true; if es is requested but
 **         not present, Tidy will not try to select from the es_XX variants.
 */
-tidySetLanguage :: (languageCode: ctmbstr) -> Bool #foreign libtidy;
+setLanguage :: (languageCode: ctmbstr) -> Bool #foreign libtidy "tidySetLanguage";
 
 /** Gets the current language used by Tidy.
 ** @result Returns a string indicating the currently set language.
 */
-tidyGetLanguage :: () -> ctmbstr #foreign libtidy;
+getLanguage :: () -> ctmbstr #foreign libtidy "tidyGetLanguage";
 
 _tidyLocaleMapItem :: struct {
     _opaque: s32;
@@ -2547,21 +2547,21 @@ TidyLangPosixName :: (item: *tidyLocaleMapItem) -> ctmbstr #foreign libtidy;
 ** specified quantity.
 ** @result Returns the desired string.
 */
-tidyLocalizedStringN :: (messageType: u32, quantity: u32) -> ctmbstr #foreign libtidy;
+localizedStringN :: (messageType: u32, quantity: u32) -> ctmbstr #foreign libtidy "tidyLocalizedStringN";
 
 /** Provides a string given `messageType` in the current localization for the
 ** single case.
 ** @param messageType The message type.
 ** @result Returns the desired string.
 */
-tidyLocalizedString :: (messageType: u32) -> ctmbstr #foreign libtidy;
+localizedString :: (messageType: u32) -> ctmbstr #foreign libtidy "tidyLocalizedString";
 
 /** Provides a string given `messageType` in the default localization (which
 ** is `en`).
 ** @param messageType The message type.
 ** @result Returns the desired string.
 */
-tidyDefaultString :: (messageType: u32) -> ctmbstr #foreign libtidy;
+defaultString :: (messageType: u32) -> ctmbstr #foreign libtidy "tidyDefaultString";
 
 /** Initiates an iterator for a list of string key codes available in Tidy.
 ** This iterator allows you to iterate through all of the codes. In order to
@@ -2627,59 +2627,59 @@ _TidyBuffer :: struct {
 }
 
 /** Initialize data structure using the default allocator */
-tidyBufInit :: (buf: *TidyBuffer) -> void #foreign libtidy;
+bufInit :: (buf: *TidyBuffer) -> void #foreign libtidy "tidyBufInit";
 
 /** Initialize data structure using the given custom allocator */
-tidyBufInitWithAllocator :: (buf: *TidyBuffer, allocator: *TidyAllocator) -> void #foreign libtidy;
+bufInitWithAllocator :: (buf: *TidyBuffer, allocator: *TidyAllocator) -> void #foreign libtidy "tidyBufInitWithAllocator";
 
 /** Free current buffer, allocate given amount, reset input pointer,
 use the default allocator */
-tidyBufAlloc :: (buf: *TidyBuffer, allocSize: u32) -> void #foreign libtidy;
+bufAlloc :: (buf: *TidyBuffer, allocSize: u32) -> void #foreign libtidy "tidyBufAlloc";
 
 /** Free current buffer, allocate given amount, reset input pointer,
 use the given custom allocator */
-tidyBufAllocWithAllocator :: (buf: *TidyBuffer, allocator: *TidyAllocator, allocSize: u32) -> void #foreign libtidy;
+bufAllocWithAllocator :: (buf: *TidyBuffer, allocator: *TidyAllocator, allocSize: u32) -> void #foreign libtidy "tidyBufAllocWithAllocator";
 
 /** Expand buffer to given size.
 **  Chunk size is minimum growth. Pass 0 for default of 256 bytes.
 */
-tidyBufCheckAlloc :: (buf: *TidyBuffer, allocSize: u32, chunkSize: u32) -> void #foreign libtidy;
+bufCheckAlloc :: (buf: *TidyBuffer, allocSize: u32, chunkSize: u32) -> void #foreign libtidy "tidyBufCheckAlloc";
 
 /** Free current contents and zero out */
-tidyBufFree :: (buf: *TidyBuffer) -> void #foreign libtidy;
+bufFree :: (buf: *TidyBuffer) -> void #foreign libtidy "tidyBufFree";
 
 /** Set buffer bytes to 0 */
-tidyBufClear :: (buf: *TidyBuffer) -> void #foreign libtidy;
+bufClear :: (buf: *TidyBuffer) -> void #foreign libtidy "tidyBufClear";
 
 /** Attach to existing buffer */
-tidyBufAttach :: (buf: *TidyBuffer, bp: *byte, size: u32) -> void #foreign libtidy;
+bufAttach :: (buf: *TidyBuffer, bp: *byte, size: u32) -> void #foreign libtidy "tidyBufAttach";
 
 /** Detach from buffer.  Caller must free. */
-tidyBufDetach :: (buf: *TidyBuffer) -> void #foreign libtidy;
+bufDetach :: (buf: *TidyBuffer) -> void #foreign libtidy "tidyBufDetach";
 
 /** Append bytes to buffer.  Expand if necessary. */
-tidyBufAppend :: (buf: *TidyBuffer, vp: *void, size: u32) -> void #foreign libtidy;
+bufAppend :: (buf: *TidyBuffer, vp: *void, size: u32) -> void #foreign libtidy "tidyBufAppend";
 
 /** Append one byte to buffer.  Expand if necessary. */
-tidyBufPutByte :: (buf: *TidyBuffer, bv: byte) -> void #foreign libtidy;
+bufPutByte :: (buf: *TidyBuffer, bv: byte) -> void #foreign libtidy "tidyBufPutByte";
 
 /** Get byte from end of buffer */
-tidyBufPopByte :: (buf: *TidyBuffer) -> s32 #foreign libtidy;
+bufPopByte :: (buf: *TidyBuffer) -> s32 #foreign libtidy "tidyBufPopByte";
 
 /** Get byte from front of buffer.  Increment input offset. */
-tidyBufGetByte :: (buf: *TidyBuffer) -> s32 #foreign libtidy;
+bufGetByte :: (buf: *TidyBuffer) -> s32 #foreign libtidy "tidyBufGetByte";
 
 /** At end of buffer? */
-tidyBufEndOfInput :: (buf: *TidyBuffer) -> Bool #foreign libtidy;
+bufEndOfInput :: (buf: *TidyBuffer) -> Bool #foreign libtidy "tidyBufEndOfInput";
 
 /** Put a byte back into the buffer.  Decrement input offset. */
-tidyBufUngetByte :: (buf: *TidyBuffer, bv: byte) -> void #foreign libtidy;
+bufUngetByte :: (buf: *TidyBuffer, bv: byte) -> void #foreign libtidy "tidyBufUngetByte";
 
 /** Initialize a buffer input source */
-tidyInitInputBuffer :: (inp: *TidyInputSource, buf: *TidyBuffer) -> void #foreign libtidy;
+initInputBuffer :: (inp: *TidyInputSource, buf: *TidyBuffer) -> void #foreign libtidy "tidyInitInputBuffer";
 
 /** Initialize a buffer output sink */
-tidyInitOutputBuffer :: (outp: *TidyOutputSink, buf: *TidyBuffer) -> void #foreign libtidy;
+initOutputBuffer :: (outp: *TidyOutputSink, buf: *TidyBuffer) -> void #foreign libtidy "tidyInitOutputBuffer";
 
 #scope_file
 
