@@ -1,7 +1,7 @@
 AT_COMPILE_TIME :: true;
 
 COMPILE       :: false; // Enable to compile the tidy-html5 library from source before generating bindings.
-COMPILE_DEBUG :: true;  // Build a debug version of tidy?
+COMPILE_DEBUG :: false;  // Build a debug version of tidy?
 
 LIBTIDY_PATH :: "source";
 
