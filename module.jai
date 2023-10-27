@@ -37,7 +37,8 @@ debug_append_node :: (builder: *String_Builder, doc: TidyDoc, node: TidyNode, in
         defer child = getNext(child);
 
         name: string;
-        if nodeGetType(child) == {
+        node_type := nodeGetType(child);
+        if node_type == {
             case .Text;
                 for 1..indent append(builder, "    ");
                 buffer: TidyBuffer;
@@ -47,20 +48,30 @@ debug_append_node :: (builder: *String_Builder, doc: TidyDoc, node: TidyNode, in
                 if text.count text.count -= 1; // Remove extra newline
                 print_to_builder(builder, "%\n", text);
 
-            case .Start;
+            case .Start; #through;
+            case .StartEnd;
                 for 1..indent append(builder, "    ");
                 name = to_string(nodeGetName(child));
-                print_to_builder(builder, "<%>\n", name);
+                print_to_builder(builder, "<%", name);
+
+                attr := attrFirst(child);
+                while attr {
+                    defer attr = attrNext(attr);
+                    name := to_string(attrName(attr));
+                    value := to_string(attrValue(attr));
+                    print_to_builder(builder, " %=\"%\"", name, value);
+                }
+
+                if node_type == .Start {
+                    append(builder, ">\n");
+                } else {
+                    append(builder, "/>\n");
+                }
 
             case .End;
                 for 1..indent append(builder, "    ");
                 name = to_string(nodeGetName(child));
                 print_to_builder(builder, "</%>\n", name);
-
-            case .StartEnd;
-                for 1..indent append(builder, "    ");
-                name = to_string(nodeGetName(child));
-                print_to_builder(builder, "<%/>\n", name);
         }
 
         debug_append_node(builder, doc, child, indent + 1);
