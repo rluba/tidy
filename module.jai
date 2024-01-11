@@ -19,6 +19,75 @@ create_tidy_allocator :: () -> *TidyAllocator {
 
 #load "unix.jai";
 
+clean_node_text :: (input_text: string, remove_entities := true) -> string {
+    text := input_text;
+    if text.count text.count -= 1; // Remove the extra newline that tidy adds for some reason
+
+    src := 0;
+    dest := 0;
+    for src: 0..text.count-1 {
+        if text[src] == #char "\n" {
+            // Replace newlines since they are not significant in HTML
+            text[dest] = #char " ";
+            dest += 1;
+        } else if remove_entities && text[src] == #char "&" {
+            // Replace &amp; which is not replaced by tidy and remove all other HTML entities,
+            // since you can’t decode them anymore once &amp; got replaced.
+            start := src;
+            end := src + 1;
+            numeric: enum {
+                NO;
+                DEC;
+                HEX;
+            }
+            valid := false;
+            while end < text.count {
+                c := text[end];
+                if c == #char ";" {
+                    entity := string.{count = end - start + 1, data = text.data + start};
+                    log("Found entity at %-% in \"%\": %", start, end, text, entity);
+                    if entity == "&amp;" {
+                        text[dest] = #char "&";
+                        dest += 1;
+                    }
+                    src = end;
+                    valid = true;
+                    break;
+                }
+
+                lower_c := c | 0x20; // Ascii to lower case
+
+                if end == start + 1 && c == #char "#" {
+                    assert(numeric == .NO);
+                    numeric = .DEC;
+                } else if numeric == .NO {
+                    if lower_c < #char "a" || lower_c > #char "z" {
+                        break; // not a real entity
+                    }
+                } else if end == start + 2 && lower_c == #char "x" {
+                    assert(numeric == .DEC);
+                    numeric = .HEX;
+                } else {
+                    if (c < #char "0" || c > #char "9") && (numeric == .DEC || lower_c < #char "a" || lower_c > #char "f") {
+                        break; // not a real entity
+                    }
+                }
+                end += 1;
+            }
+            if !valid {
+                text[dest] = text[src];
+                dest += 1;
+            }
+        } else {
+            text[dest] = text[src];
+            dest += 1;
+        }
+    }
+    text.count = dest;
+
+    return text;
+}
+
 //
 // Helpers for debugging:
 //
