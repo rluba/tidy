@@ -19,14 +19,14 @@ create_tidy_allocator :: () -> *TidyAllocator {
 
 #load "unix.jai";
 
-clean_node_text :: (input_text: string, remove_entities := true) -> string {
+clean_node_text :: (input_text: string, remove_entities := true, preserve_newlines := false) -> string {
     text := input_text;
     if text.count text.count -= 1; // Remove the extra newline that tidy adds for some reason
 
     src := 0;
     dest := 0;
     for src: 0..text.count-1 {
-        if text[src] == #char "\n" {
+        if !preserve_newlines && text[src] == #char "\n" {
             // Replace newlines since they are not significant in HTML
             text[dest] = #char " ";
             dest += 1;
