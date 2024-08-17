@@ -1,8 +1,5 @@
 AT_COMPILE_TIME :: true;
 
-COMPILE       :: false; // Enable to compile the tidy-html5 library from source before generating bindings.
-COMPILE_DEBUG :: false;  // Build a debug version of tidy?
-
 LIBTIDY_PATH :: "source";
 
 DECLARATIONS_TO_OMIT :: string.[
@@ -21,9 +18,11 @@ DECLARATIONS_TO_OMIT :: string.[
 ];
 
 #if AT_COMPILE_TIME {
-    #run {
+    #run,stallable {
         set_build_options_dc(.{do_output=false});
-        if !generate_bindings() {
+        options := get_build_options();
+        args := options.compile_time_command_line;
+        if !generate_bindings(args, options.minimum_os_version) {
             compiler_set_workspace_status(.FAILED);
         }
     }
@@ -32,16 +31,60 @@ DECLARATIONS_TO_OMIT :: string.[
 
     main :: () {
         set_working_directory(path_strip_filename(get_path_of_running_executable()));
-        if !generate_bindings() {
+        if !generate_bindings(get_command_line_arguments(), #run get_build_options().minimum_os_version) {
             exit(1);
         }
     }
 }
 
-generate_bindings :: () -> bool {
-    #if COMPILE {
-		success := build_libtidy();
-		if !success return false;
+generate_bindings :: (args: [] string, minimum_os_version: type_of(Build_Options.minimum_os_version)) -> bool {
+    target_x64     := array_find(args, "-x64");
+    target_arm     := array_find(args, "-arm64");
+    compile        := array_find(args, "-compile");
+    compile_debug  := array_find(args, "-debug");
+
+    os_target  := OS;
+    cpu_target := CPU;
+    if target_x64     cpu_target = .X64;
+    if target_arm     cpu_target = .ARM64;
+
+    lib_directory: string;
+    if os_target == {
+        case .WINDOWS;
+            lib_directory = "windows";
+        case .LINUX;
+            lib_directory = "linux";
+        case .MACOS;
+            lib_directory = "macos";
+        case;
+            assert(false);
+    }
+
+
+    if compile {
+        if os_target == .MACOS {
+            lib_directory_x64 := join(lib_directory, "_x64",, temp);
+            lib_directory_arm64 := join(lib_directory, "_arm64",, temp);
+            success := compile_libtidy_variant(os_target, .X64,   .{10, 13}, lib_directory_x64,   compile_debug = compile_debug);
+            if !success return false;
+            success  = compile_libtidy_variant(os_target, .ARM64, .{11, 0},  lib_directory_arm64, compile_debug = compile_debug);
+            if !success return false;
+
+            // Create universal binaries out of the two arch builds:
+            success = make_directory_if_it_does_not_exist(lib_directory);
+            if !success {
+                log_error("Could not create directory \"%\"\n", lib_directory);
+                return false;
+            }
+            universal_dylib_path := tprint("%/libtidy.dylib", lib_directory);
+            run_or_exit("lipo", "-create", tprint("%/lib/libtidy.dylib", lib_directory_x64), tprint("%/lib/libtidy.dylib", lib_directory_arm64), "-output", universal_dylib_path);
+            run_or_exit("lipo", "-create", tprint("%/lib/libtidy.a",     lib_directory_x64), tprint("%/lib/libtidy.a",     lib_directory_arm64), "-output", tprint("%/libtidy.a", lib_directory));
+             // Fix the dynamic library’s ID since we copied the symlinked short name variant. Otherwise the library still thinks it’s called "libtidy.5.8.0.dylib" and anything you link against it will look for the versioned library name.
+            run_or_exit("install_name_tool", "-id", "@rpath/libtidy.dylib", universal_dylib_path);
+        } else {
+            success := compile_libtidy_variant(os_target, .X64, minimum_os_version, lib_directory, compile_debug = compile_debug);
+            if !success return false;
+        }
 	}
 
     output_filename: string;
@@ -49,19 +92,13 @@ generate_bindings :: () -> bool {
     {
         using opts;
 
-		#if OS == .LINUX {
-			array_add(*libpaths, "linux");
-		} else #if OS == .MACOS {
-			array_add(*libpaths, "macos");
-		} else {
-			assert(false);
-		}
+        array_add(*libpaths, lib_directory);
 		output_filename = "unix.jai";
 		generate_library_declarations = false;
 		footer = FOOTER_UNIX;
 
-		libtidy_include_path := tprint("%/include", PLATFORM_NAME);
-        array_add(*libpaths,      tprint("%/lib", PLATFORM_NAME));
+		libtidy_include_path := "source/include";
+        array_add(*libpaths,      lib_directory);
         array_add(*libnames,      "libtidy");
         array_add(*include_paths, libtidy_include_path);
         array_add(*source_files,  tprint("%/tidy.h", libtidy_include_path));
@@ -87,8 +124,8 @@ generate_bindings :: () -> bool {
     compiler_report(tprint("Unsupported platform: %", OS));
 }
 
-build_libtidy :: () -> bool {
-	install_dir := PLATFORM_NAME;
+compile_libtidy_variant :: (os_target: Operating_System_Tag, cpu_target: CPU_Tag, minimum_os_version: type_of(Build_Options.minimum_os_version), target_directory: string, compile_debug: bool) -> bool {
+    install_dir := target_directory;
     success := make_directory_if_it_does_not_exist(install_dir);
     if !success {
         log_error("Could not create directory \"%\"\n", install_dir);
@@ -124,13 +161,16 @@ build_libtidy :: () -> bool {
         tprint("-DCMAKE_PREFIX_PATH=%",    install_dir),
 	);
 
-    if COMPILE_DEBUG {
+    if compile_debug {
         array_add(*config_command, "-DCMAKE_BUILD_TYPE=Debug");
     }
 
     #if OS == .MACOS {
-        using options := get_build_options();
-        array_add(*config_command, tprint("-DCMAKE_OSX_DEPLOYMENT_TARGET=%.%", minimum_os_version.major, minimum_os_version.minor));
+        arch_name := ifx cpu_target == .X64 then "x86_64" else "arm64";
+        array_add(*config_command,
+            tprint("-DCMAKE_OSX_ARCHITECTURES=%", arch_name),
+            tprint("-DCMAKE_OSX_DEPLOYMENT_TARGET=%.%", minimum_os_version.major, minimum_os_version.minor),
+        );
     }
     run_or_exit(..config_command, working_directory = absolute_build_dir);
     log("Done configuring libtidy");
@@ -191,7 +231,7 @@ libtidy_visitor :: (decl: *Declaration, parent_decl: *Declaration) -> Declaratio
 
 FOOTER_UNIX :: #string END
 
-#if OS == .MACOS    libtidy :: #library "macos/lib/libtidy";
+#if OS == .MACOS    libtidy :: #library "macos/libtidy";
 #if OS == .LINUX    libtidy :: #library "linux/lib/libtidy";
 
 END

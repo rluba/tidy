@@ -2,3 +2,5 @@
 *_build/
 *.dSYM
 example/example
+macos_arm64/
+macos_x64/

@@ -6,7 +6,7 @@
 
 
 
-NULLSTR :: cast(tmbstr)"";
+NULLSTR :: cast(tmbstr) "";
 
 EndOfStream :: ~0;
 
@@ -2802,6 +2802,6 @@ initOutputBuffer :: (outp: *TidyOutputSink, buf: *TidyBuffer) -> void #foreign l
 }
 
 
-#if OS == .MACOS    libtidy :: #library "macos/lib/libtidy";
+#if OS == .MACOS    libtidy :: #library "macos/libtidy";
 #if OS == .LINUX    libtidy :: #library "linux/lib/libtidy";
 
