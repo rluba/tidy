@@ -1,6 +1,6 @@
 Jai_Tidy_Allocator :: struct {
     using #as base: TidyAllocator;
-    ctx: Context;
+    ctx: #Context;
     allocator: Allocator;
     vtable: TidyAllocatorVtbl;
 }
