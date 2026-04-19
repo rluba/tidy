@@ -195,7 +195,7 @@ jai_tidy_panic :: (self: *TidyAllocator, msg: ctmbstr) -> void #c_call {
 // Store the size at the start of the allocation – or we can’t realloc!
 save_size_and_adjust :: inline (block: *void, block_size: s64) -> *void {
     if !block return null;
-    <<cast(*s64) block = block_size;
+    (cast(*s64) block).* = block_size;
     return block + size_of(s64);
 }
 
@@ -203,7 +203,7 @@ save_size_and_adjust :: inline (block: *void, block_size: s64) -> *void {
 get_real_start_and_size :: inline (adjusted_block: *void) -> *void, s64 {
     if !adjusted_block return null, 0;
     real_base := adjusted_block - size_of(s64);
-    size := <<(cast(*s64) real_base);
+    size := (cast(*s64) real_base).*;
     return real_base, size;
 }
 
